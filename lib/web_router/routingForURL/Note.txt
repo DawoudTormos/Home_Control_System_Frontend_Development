@@ -1,0 +1,9 @@
+This folder is to deal with web diffrenetly from other platforms regarding URLS. 
+Beacuse these 2 lines :
+ - import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+ - setUrlStrategy(PathUrlStrategy());
+
+will cause compiling problems for platforms other than web
+
+solved with conditional imports as u can see.
+
