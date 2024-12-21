@@ -1,31 +1,17 @@
 import 'package:edittable_grid_flutter/pages/add_devices_sub_pages/components/icons.dart';
+import 'package:edittable_grid_flutter/pages/barcode_scanner_controller.dart';
 import 'package:flutter/material.dart';
 
-class DeviceLinkNavigator extends StatelessWidget {
-  const DeviceLinkNavigator({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false, // Remove the debug flag
-      home: const DeviceLinkPage(),
-      routes: {
-        '/linkDevice': (context) => const DeviceLinkPage(),
-        // Add more routes as you create other pages
-      },
-    );
-  }
-}
-
-class DeviceLinkPage extends StatefulWidget {
-  const DeviceLinkPage({super.key});
+class NewDevicePage extends StatefulWidget {
+  const NewDevicePage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _DeviceLinkPageState createState() => _DeviceLinkPageState();
+  _NewDevicePageState createState() => _NewDevicePageState();
 }
 
-class _DeviceLinkPageState extends State<DeviceLinkPage> {
+class _NewDevicePageState extends State<NewDevicePage> {
   final List<Color> colors = [
     Colors.red,
     Colors.blue,
@@ -53,6 +39,50 @@ class _DeviceLinkPageState extends State<DeviceLinkPage> {
     // Sub-type can be nullable
   ];
 
+
+   void navigateToNextPage() {
+    final String name = deviceName.trim();
+    print(name);
+    print(selectedIcon);
+    print(selectedColor);
+    if (name.isEmpty || selectedIcon == null || selectedColor == null ) {
+      // Show an error if any field is empty or not selected
+      ScaffoldMessenger.of(context).showSnackBar(
+        
+        const SnackBar(
+          content: Text('Please fill all fields and make a selection!'),
+          behavior: SnackBarBehavior.floating, // Makes the SnackBar float
+          margin: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          bottom: 100, // Adjust this to leave space above the bottom navbar
+        ),
+      ),);
+      return;
+    }
+
+
+  Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const BarcodeScannerWithController(),
+              ),
+            );
+    // Navigate to the next page with the data
+    /*Navigator.pushNamed(
+      context,
+      '/QRScannerPage',
+      arguments: {
+        'deviceName': name,
+        //'room': dropdownValue,
+        'icon': selectedIcon,
+        'color': selectedColor,
+      },
+    );*/
+
+
+  }
+
+
   Color? selectedColor;
   IconData? selectedIcon;
   String? selectedSubType;
@@ -63,7 +93,9 @@ class _DeviceLinkPageState extends State<DeviceLinkPage> {
   @override
   Widget build(BuildContext context) {
 
-        //final double screenWidth = MediaQuery.of(context).size.height;
+    //final double screenWidth = MediaQuery.of(context).size.height;
+     final FocusNode _focusNode = FocusNode();
+
 
     if (icons.length != iconsNames.length) {
       //print(icons.length);
@@ -84,6 +116,7 @@ class _DeviceLinkPageState extends State<DeviceLinkPage> {
     //print(filteredIcons.length);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0), // Increased vertical padding
         child: Center(
@@ -96,13 +129,26 @@ class _DeviceLinkPageState extends State<DeviceLinkPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   // Page title as text
+                  
                   const Text(
-                    "Link a Device",
+                    "Enter new Device Details",
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Device Name
+                  const Text("Enter Device Name:"),
+                  TextField(
+                    focusNode: _focusNode,
+                    decoration: const InputDecoration(
+                      labelText: "Device Name",
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) => setState(() => deviceName = value),
                   ),
                   const SizedBox(height: 20),
               
@@ -136,6 +182,7 @@ class _DeviceLinkPageState extends State<DeviceLinkPage> {
                   // Icon Picker with Search
                   const Text("Choose an Icon:"),
                   TextField(
+                    focusNode: _focusNode,
                     decoration: const InputDecoration(
                       labelText: "Search Icon",
                       border: OutlineInputBorder(),
@@ -171,22 +218,13 @@ class _DeviceLinkPageState extends State<DeviceLinkPage> {
                   ),
                   const SizedBox(height: 20),
               
-                  // Device Name
-                  const Text("Enter Device Name:"),
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: "Device Name",
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (value) => setState(() => deviceName = value),
-                  ),
-                  const SizedBox(height: 20),
+                  
               
                   // Sub-type Dropdown
-                  const Text("Choose Sub-Type:"),
+                  const Text("Choose Device Type:"),
                   DropdownButton<String?>(
                     value: selectedSubType,
-                    hint: const Text("Select Sub-Type"),
+                    hint: const Text("Select Device Type"),
                     isExpanded: true,
                     items: subTypes.map((subType) {
                       return DropdownMenuItem(
@@ -208,25 +246,7 @@ class _DeviceLinkPageState extends State<DeviceLinkPage> {
                       shadowColor: Colors.transparent,
                     ),
                     onPressed: () {
-                      if (selectedColor == null ||
-                          selectedIcon == null ||
-                          deviceName.isEmpty ||
-                          selectedSubType == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Please complete all fields"),
-                          ),
-                        );
-                        return;
-                      }
-              
-                      // Handle device linking logic here
-              
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Device $deviceName linked successfully!"),
-                        ),
-                      );
+                      navigateToNextPage();
                     },
                     child: const Text("Link Device"),
                   ),

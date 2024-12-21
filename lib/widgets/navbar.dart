@@ -164,7 +164,7 @@ class NavBar extends StatelessWidget {
    screens = [
     Dashboard(gridItems: gridItems, gridItemsIndexes: gridItemsIndexes), // Home
     const AIAssistantPage(), // Dashboard
-    const DeviceLinkNavigator(), // Device Manager 
+    const NewDevicePage(), // Device Manager 
     Container()
   ];
 

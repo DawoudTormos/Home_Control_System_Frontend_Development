@@ -5,6 +5,10 @@ allprojects {
     }
 }
 
+andriod{
+    ndkVersion = "27.0.12077973"
+}
+
 rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
