@@ -1,21 +1,19 @@
 import 'dart:async';
-
-import 'package:edittable_grid_flutter/pages/add_devices_sub_pages/scanner_button_widgets.dart';
-import 'package:edittable_grid_flutter/pages/add_devices_sub_pages/scanner_error_widget.dart';
+import 'package:edittable_grid_flutter/pages/add_devices_sub_pages/components/scanner_button_widgets.dart';
+import 'package:edittable_grid_flutter/pages/add_devices_sub_pages/components/scanner_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 
-class BarcodeScannerWithController extends StatefulWidget {
-  const BarcodeScannerWithController({super.key});
+class QRScannerWithController extends StatefulWidget {
+  const QRScannerWithController({super.key});
 
   @override
-  State<BarcodeScannerWithController> createState() =>
-      _BarcodeScannerWithControllerState();
+  State<QRScannerWithController> createState() =>
+      _QRScannerWithControllerState();
 }
 
-class _BarcodeScannerWithControllerState
-    extends State<BarcodeScannerWithController> with WidgetsBindingObserver {
+class _QRScannerWithControllerState extends State<QRScannerWithController> with WidgetsBindingObserver {
   final MobileScannerController controller = MobileScannerController(
     autoStart: false,
     torchEnabled: true,
@@ -84,7 +82,7 @@ class _BarcodeScannerWithControllerState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('With controller')),
+      //appBar: AppBar(title: const Text('With controller')),
       backgroundColor: Colors.black,
       body: Stack(
         children: [

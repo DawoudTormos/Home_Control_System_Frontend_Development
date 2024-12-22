@@ -192,6 +192,8 @@ class NavBar extends StatelessWidget {
           rerenderMainMobile();
             break;
           case 2:
+          currentPage = "addDevice";
+          rerenderMainMobile();
             break;
           case 3:
             break;

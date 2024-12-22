@@ -1,5 +1,6 @@
 import 'package:edittable_grid_flutter/pages/add_devices_sub_pages/components/icons.dart';
-import 'package:edittable_grid_flutter/pages/barcode_scanner_controller.dart';
+import 'package:edittable_grid_flutter/pages/add_devices_sub_pages/QRcode_scanner_controller.dart';
+import 'package:edittable_grid_flutter/pages/add_devices_sub_pages/explain_QRCode_scanner.dart';
 import 'package:flutter/material.dart';
 
 
@@ -64,7 +65,7 @@ class _NewDevicePageState extends State<NewDevicePage> {
 
   Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const BarcodeScannerWithController(),
+                builder: (context) => const ScanQrInfoPage(),
               ),
             );
     // Navigate to the next page with the data
@@ -94,7 +95,6 @@ class _NewDevicePageState extends State<NewDevicePage> {
   Widget build(BuildContext context) {
 
     //final double screenWidth = MediaQuery.of(context).size.height;
-     final FocusNode _focusNode = FocusNode();
 
 
     if (icons.length != iconsNames.length) {
@@ -143,7 +143,6 @@ class _NewDevicePageState extends State<NewDevicePage> {
                   // Device Name
                   const Text("Enter Device Name:"),
                   TextField(
-                    focusNode: _focusNode,
                     decoration: const InputDecoration(
                       labelText: "Device Name",
                       border: OutlineInputBorder(),
@@ -182,7 +181,6 @@ class _NewDevicePageState extends State<NewDevicePage> {
                   // Icon Picker with Search
                   const Text("Choose an Icon:"),
                   TextField(
-                    focusNode: _focusNode,
                     decoration: const InputDecoration(
                       labelText: "Search Icon",
                       border: OutlineInputBorder(),
@@ -194,26 +192,30 @@ class _NewDevicePageState extends State<NewDevicePage> {
                   const SizedBox(height: 10),
                   SizedBox(
                     height: 180,
-                    child: GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
+                    
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: GridView.builder(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                          crossAxisSpacing: 8.0,
+                          mainAxisSpacing: 8.0,
+                        ),
+                        itemCount: filteredIcons.length,
+                        itemBuilder: (context, index) {
+                          final icon = filteredIcons[index];
+                          return GestureDetector(
+                            onTap: () => setState(() => selectedIcon = icon),
+                            child: Icon(
+                              icon,
+                              color: selectedIcon == icon
+                                  ? Colors.blue
+                                  : Colors.black,
+                              size: 32.0,
+                            ),
+                          );
+                        },
                       ),
-                      itemCount: filteredIcons.length,
-                      itemBuilder: (context, index) {
-                        final icon = filteredIcons[index];
-                        return GestureDetector(
-                          onTap: () => setState(() => selectedIcon = icon),
-                          child: Icon(
-                            icon,
-                            color: selectedIcon == icon
-                                ? Colors.blue
-                                : Colors.black,
-                            size: 32.0,
-                          ),
-                        );
-                      },
                     ),
                   ),
                   const SizedBox(height: 20),
