@@ -1,10 +1,18 @@
 import 'dart:convert';
+import 'package:edittable_grid_flutter/stateManagment/login_state.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 class ApiService {
   final String baseUrl = "http://10.0.2.2:8080";
   final _storage = const FlutterSecureStorage();
+  
+  final dynamic mainWidgetKey;
+
+   ApiService({required this.mainWidgetKey});
+
 
   // Store token securely
   Future<void> saveToken(String token) async {
@@ -17,7 +25,9 @@ class ApiService {
   }
 
   // Login Method
-  Future<Map<String, dynamic>> login(String username, String password) async {
+  Future<Map<String, dynamic>> login( String username, String password) async {
+    final BuildContext context = mainWidgetKey.currentContext!;
+
     final url = Uri.parse("$baseUrl/login");
     final response = await http.post(
       url,
@@ -29,7 +39,8 @@ class ApiService {
       final data = json.decode(response.body);
       if (data.containsKey("token")) {
         await saveToken(data["token"]);
-        return {"success": true, "token": data["token"]};
+        Provider.of<LoginState>(context, listen: false).login();
+        return {"success": true};
       } else {
         return {"success": false, "error": data["error"]};
       }

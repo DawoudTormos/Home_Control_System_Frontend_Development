@@ -47,6 +47,7 @@ dependencies:
   image_picker: ^1.1.2
   flutter_plugin_android_lifecycle: ^2.0.24
   flutter_secure_storage: ^9.2.2
+  provider: ^6.1.2
   
 
 dev_dependencies:
