@@ -1,5 +1,6 @@
 import 'package:edittable_grid_flutter/main_mobile.dart';
 import 'package:edittable_grid_flutter/main_web.dart';
+import 'package:edittable_grid_flutter/pages/login.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'web_router/app_router.dart';
@@ -18,6 +19,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+   return  MaterialApp(home: LoginPage() ,)
+    ;
     if (kIsWeb) {
       if (kDebugMode) {
         print("I am on web");
