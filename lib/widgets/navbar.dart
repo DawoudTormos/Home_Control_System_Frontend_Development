@@ -9,47 +9,61 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 final Map<String, List<Map<String, dynamic>>> gridItems = {
   "Kitchen": [
     {
+      "id" : "1",
       "name": "Lamp 1",
       "color": Colors.red,
       "icon": Icons.lightbulb,
+      "type": "switch",
       "value": true
     },
     {
+      "id" : "1",
       "name": "Spotlight 1",
       "color": Colors.orange,
       "icon": Icons.light,
+      "type": "switch",
       "value": 0.86
     },
     {
+      "id" : "1",
       "name": "AC 2",
       "color": Colors.purple,
       "icon": Icons.ac_unit,
+      "type": "switch",
       "value": true
     },
     {
+      "id" : "1",
       "name": "Door Lock",
       "color": Colors.teal,
       "icon": Icons.lock_outlined,
+      "type": "switch",
       "value": true
     },
   ],
   "Living Room": [
     {
+      "id" : "1",
       "name": "Heater",
       "color": Colors.pink,
       "icon": Icons.air_rounded,
+      "type": "switch",
       "value": true
     },
     {
+      "id" : "1",
       "name": "Lamp 2",
       "color": Colors.green,
       "icon": Icons.lightbulb,
+      "type": "switch",
       "value": true
     },
     {
+      "id" : "1",
       "name": "Lamp 3",
       "color": Colors.blue,
       "icon": Icons.lightbulb,
+      "type": "switch",
       "value": true
     },
   ],
