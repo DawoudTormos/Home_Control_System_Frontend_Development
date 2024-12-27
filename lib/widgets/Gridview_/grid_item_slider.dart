@@ -21,8 +21,8 @@ class _GridItemSlider extends State<GridItemSlider> {
       color: Colors.white,
       shape: RoundedRectangleBorder(
         side: BorderSide(
-          color: widget.item["value"] > 0
-              ? widget.item["color"]
+          color: widget.item["Value"] > 0
+              ? widget.item["Color"]
               : Colors.grey[700]!,
           width: 2,
         ),
@@ -43,18 +43,18 @@ class _GridItemSlider extends State<GridItemSlider> {
                 Row(
                   children: [
                     Icon(
-                      widget.item["icon"],
-                      color: widget.item["value"] > 0
-                          ? widget.item["color"]
+                      widget.item["Icon"],
+                      color: widget.item["Value"] > 0
+                          ? widget.item["Color"]
                           : Colors.grey[700]!,
                       size: (screenWidth < 600 ? 36 : 38) * factor,
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      widget.item["name"],
+                      widget.item["Name"],
                       style: TextStyle(
-                        color: widget.item["value"] > 0
-                            ? widget.item["color"]
+                        color: widget.item["Value"] > 0
+                            ? widget.item["Color"]
                             : Colors.grey[700]!,
                         fontWeight: FontWeight.bold,
                         fontSize: 16 * factor,
@@ -63,7 +63,7 @@ class _GridItemSlider extends State<GridItemSlider> {
                   ],
                 ),
                 Text(
-                  "Value: ${(widget.item['value'] * 100).toInt()}%",
+                  "Value: ${(widget.item['Value'] * 100).toInt()}%",
                   style: TextStyle(
                     color: Colors.grey[700]!,
                     fontSize: screenWidth < 430 ? 15 * factor : 14 * factor,
@@ -80,16 +80,16 @@ class _GridItemSlider extends State<GridItemSlider> {
                     RoundSliderOverlayShape(overlayRadius: 25 * factor * 0.81),
               ),
               child: Slider(
-                value: (widget.item['value'] as double),
+                value: (widget.item['Value'] as double),
                 min: 0,
                 max: 1,
                 divisions: 100,
                 onChanged: (newValue) {
-                  widget.item['value'] = newValue;
+                  widget.item['Value'] = newValue;
                   setState(() {});
                 },
-                activeColor: widget.item["value"] > 0
-                    ? widget.item["color"]
+                activeColor: widget.item["Value"] > 0
+                    ? widget.item["Color"]
                     : Colors.grey[700]!,
               ),
             ),

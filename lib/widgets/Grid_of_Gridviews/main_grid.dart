@@ -1,6 +1,8 @@
+import 'package:edittable_grid_flutter/stateManagment/login_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import "package:edittable_grid_flutter/widgets/gridview_/editable_grid.dart";
+import 'package:provider/provider.dart';
 
 
 
@@ -31,7 +33,7 @@ class MainGridState extends State<MainGrid> {
     bool getEditMode() {
 return editMode;
   }
-
+  
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -164,11 +166,15 @@ return editMode;
           physics: const NeverScrollableScrollPhysics(),
           itemCount: widget.gridItems!.length,
           itemBuilder: (context, index) {
+            print(widget.gridItems!.length);
+                        print("\n");
+            print(widget.gridItemsIndexes!.length);
+            print("\n");            print(index);
+            print("\n");
             final item = widget.gridItems![widget.gridItemsIndexes![index]]!;
 
             Widget gridItem = EditableGrid(
                 title: widget.gridItemsIndexes![index], data: item);
-
             if (editMode) {
               return Draggable<int>(
                 data: index,

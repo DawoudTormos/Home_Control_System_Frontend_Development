@@ -1,3 +1,4 @@
+import 'package:edittable_grid_flutter/main.dart';
 import 'package:edittable_grid_flutter/pages/ai_assistant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,107 +13,6 @@ void configureWebURL() {
   // to deal with web diffrenetly from other platforms regarding URLS
   configureWebURL_();
 }
-
-final Map<String, List<Map<String, dynamic>>> gridItems = {
-  "Kitchen": [
-    {
-      "name": "Lamp 1",
-      "color": Colors.red,
-      "icon": Icons.lightbulb,
-      "value": true
-    },
-    {
-      "name": "Spotlight 1",
-      "color": Colors.orange,
-      "icon": Icons.light,
-      "value": 0.86
-    },
-    {
-      "name": "AC 2",
-      "color": Colors.purple,
-      "icon": Icons.ac_unit,
-      "value": true
-    },
-    {
-      "name": "Door Lock",
-      "color": Colors.teal,
-      "icon": Icons.lock_outlined,
-      "value": true
-    },
-  ],
-  "Living Room": [
-    {
-      "name": "Heater",
-      "color": Colors.pink,
-      "icon": Icons.air_rounded,
-      "value": true
-    },
-    {
-      "name": "Lamp 2",
-      "color": Colors.green,
-      "icon": Icons.lightbulb,
-      "value": true
-    },
-    {
-      "name": "Lamp 3",
-      "color": Colors.blue,
-      "icon": Icons.lightbulb,
-      "value": true
-    },
-  ],
-};
-
-final Map<String, List<Map<String, dynamic>>> gridItems2 = {
-  "Kitchen2": [
-    {
-      "name": "Lamp 1",
-      "color": Colors.red,
-      "icon": Icons.lightbulb,
-      "value": true
-    },
-    {
-      "name": "Spotlight 1",
-      "color": Colors.orange,
-      "icon": Icons.light,
-      "value": 0.86
-    },
-    {
-      "name": "AC 2",
-      "color": Colors.purple,
-      "icon": Icons.ac_unit,
-      "value": true
-    },
-    {
-      "name": "Door Lock",
-      "color": Colors.teal,
-      "icon": Icons.lock_outlined,
-      "value": true
-    },
-  ],
-  "Living Room2": [
-    {
-      "name": "Heater",
-      "color": Colors.pink,
-      "icon": Icons.air_rounded,
-      "value": true
-    },
-    {
-      "name": "Lamp 2",
-      "color": Colors.green,
-      "icon": Icons.lightbulb,
-      "value": true
-    },
-    {
-      "name": "Lamp 3",
-      "color": Colors.blue,
-      "icon": Icons.lightbulb,
-      "value": true
-    },
-  ],
-};
-
-final List<String> gridItemsIndexes = ["Kitchen", "Living Room"];
-final List<String> gridItemsIndexes2 = ["Kitchen2", "Living Room2"];
 
 class AppRouter extends RouterDelegate<AppState>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppState> {
@@ -142,7 +42,7 @@ class AppRouter extends RouterDelegate<AppState>
       pages: [
         MaterialPage(
             child:
-                Dashboard(gridItems: gridItems, gridItemsIndexes: gridItemsIndexes),
+                Dashboard(gridItems: api!.gridItems, gridItemsIndexes: api!.gridItemsIndexes),
             key: const ValueKey('HomePage')),
          if(_currentState.path == "AIAssitant")
             const MaterialPage(

@@ -49,25 +49,38 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     loginState = Provider.of<LoginState>(context);
-
+    //api!.checkToken();
+    
+  print("building");
    return  MaterialApp(
-    home: isloggedIn(loginState!.isLoggedIn),
+    
+    home: isTokenChecked(loginState!.isTokenChecked, loginState!.isLoggedIn, loginState!.isDataLoaded),
     );
     
 
   }
   
-   Widget isloggedIn(bool isLoggedIn){
-    if(isLoggedIn){
-      return isDataLoaded(false);
+   Widget isTokenChecked(bool isTokenChecked, bool isLoggedIn, bool isDataLoaded ){
+
+    if(isTokenChecked!){
+      return isloggedIn(isLoggedIn,isDataLoaded );
+      }else{
+      return const LoadingPage();
+
+      }
+   }  
+   Widget isloggedIn(bool? isLoggedIn, bool isdataLoaded){
+
+    if(isLoggedIn!){
+      return isDataLoaded(isdataLoaded);
       }else{
       return LoginPage();
 
       }
    }
-      Widget isDataLoaded(bool isDataLoaded){
-      if(isDataLoaded){
-      return mainPage();
+      Widget isDataLoaded(bool? isDataLoaded){
+      if(isDataLoaded!){
+      return goToMainPage();
       }else{
       return const LoadingPage();
 
@@ -75,7 +88,7 @@ class _MyAppState extends State<MyApp> {
       }
 
   
-  Widget mainPage(){
+  Widget goToMainPage(){
 
     if (kIsWeb) {
       if (kDebugMode) {

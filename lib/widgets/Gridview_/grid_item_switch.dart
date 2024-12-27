@@ -23,8 +23,8 @@ class _GridItemSwitchState extends State<GridItemSwitch> {
       color: Colors.white,
       shape: RoundedRectangleBorder(
         side: BorderSide(
-          color: widget.item["value"] == true
-              ? widget.item["color"][300]
+          color: widget.item["Value"] == true
+              ? widget.item["Color"]
               : Colors.grey[700]!,
           width: 2,
         ),
@@ -40,18 +40,18 @@ class _GridItemSwitchState extends State<GridItemSwitch> {
             Row(
               children: [
                 Icon(
-                  widget.item["icon"],
-                  color: widget.item["value"] == true
-                      ? widget.item["color"]
+                  widget.item["Icon"],
+                  color: widget.item["Value"] == true
+                      ? widget.item["Color"]
                       : Colors.grey[700]!,
                   size: (screenWidth < 600 ? 36 : 38) * factor,
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  widget.item["name"],
+                  widget.item["Name"],
                   style: TextStyle(
-                    color: widget.item["value"] == true
-                        ? widget.item["color"]
+                    color: widget.item["Value"] == true
+                        ? widget.item["Color"]
                         : Colors.grey[700]!,
                     fontWeight: FontWeight.bold,
                     fontSize: 16 * factor,
@@ -62,13 +62,13 @@ class _GridItemSwitchState extends State<GridItemSwitch> {
             Transform.scale(
               scale: factor,
               child: Switch(
-                value: widget.item['value'],
+                value: widget.item['Value'],
                 onChanged: (newValue) {
-                  widget.item['value'] = newValue;
+                  widget.item['Value'] = newValue;
                   setState(() {});
                 },
-                activeColor: widget.item["value"] == true
-                    ? widget.item["color"]
+                activeColor: widget.item["Value"] == true
+                    ? widget.item["Color"]
                     : Colors.grey[700]!,
               ),
             ),

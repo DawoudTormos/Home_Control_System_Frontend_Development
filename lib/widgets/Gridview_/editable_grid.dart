@@ -73,7 +73,7 @@ class _EditableGridState extends State<EditableGrid> {
               itemBuilder: (context, index) {
                 final item = widget.data[index];
 
-                Widget gridItem = item['value'] is bool
+                Widget gridItem = item['Type'] == 0
                     ? GridItemSwitch(item: item)
                     : GridItemSlider(item: item);
 

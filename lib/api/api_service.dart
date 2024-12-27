@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:edittable_grid_flutter/stateManagment/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -11,23 +12,218 @@ class ApiService {
   
   final dynamic mainWidgetKey;
 
-   ApiService({required this.mainWidgetKey});
+     ApiService({required this.mainWidgetKey}) {
+
+    _delayedAction();
+
+  }
+  Future<void> _delayedAction() async {
+    await Future.delayed(Duration(milliseconds: 500));
+
+    // Code to execute after the delay
+    //print('Action performed after 250 milliseconds!');
+     checkToken();
+
+
+  }
+
+Future<void> waitToFetchAndProcessDevices() async {
+    await Future.delayed(Duration(milliseconds: 150));
+    fetchAndProcessDevices();/**/
+}
+
+Future<void> fetchAndProcessDevices() async {
+    final url = Uri.parse("$baseUrl/secure/getDevices");
+      final response = await http.get(url,
+      headers:{
+        'Authorization' : await getLocalToken() ?? "",
+      }
+    );
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body) as Map<String, dynamic>;
+
+    // Initialize final map for gridItems
+    final Map<String, List<Map<String, dynamic>>> gridItems = {};
+
+    data.forEach((room, devices) {
+      // Parse the list of devices
+      final List<Map<String, dynamic>> deviceList = (devices as List<dynamic>).map((device) {
+        // Convert IconCode and IconFamily to IconData
+        final iconData = IconData(
+          device['IconCode'],
+          fontFamily: device['IconFamily'],
+        );
+        if(device["Type"] == 1){
+                    print(device["Value"]);
+
+          device["Value"] = device["Value"].toDouble() / 100 ;
+          print(device["Value"]);
+        }else{
+          device["Value"] = (device["Value"] > 0.5) as bool ;
+        }
+        return {
+          "ID": device["ID"],
+          "Name": device["Name"],
+          "Color": Color(device["Color"]),
+          "Icon": iconData,
+          "Type": device["Type"],
+          "Value":  device["Value"],
+          "Index": device["Index"],
+        };
+      }).toList();
+
+      // Sort devices by index
+      deviceList.sort((a, b) => a["Index"].compareTo(b["Index"]));
+
+      // Check for duplicates and fix indexes
+      final Set<int> seenIDs = {};
+      int uniqueIndex = 0;
+
+      for (var device in deviceList) {
+        if (!seenIDs.add(device["ID"])) {
+          // Duplicate found, assign new index
+          device["Index"] = uniqueIndex++;
+        } else {
+          // Ensure indexes are in ascending order for unique devices
+          device["Index"] = uniqueIndex++;
+        }
+      }
+
+      // Add processed devices to gridItems
+      gridItems[room] = deviceList;
+    });
+
+      this.gridItems =  gridItems;
+
+      final BuildContext context = mainWidgetKey.currentContext!;
+      Provider.of<LoginState>(context, listen: false).login();
+      Provider.of<LoginState>(context, listen: false).setDataLoaded(true);
+
+  } else {
+    throw Exception('Failed to fetch devices');
+  }
+}
+
+
+  /*Future<void> fetchDevices() async {
+    final BuildContext context = mainWidgetKey.currentContext!;
+    final url = Uri.parse("$baseUrl/secure/getDevices");
+    final response = await http.get(url,
+      headers:{
+        'Authorization' : await getLocalToken() ?? "",
+      }
+    );
+
+    if (response.statusCode == 200) {
+      // Parse the response JSON
+      Map<String, dynamic> data = json.decode(response.body);
+      print(data);
+
+      // Convert to the desired structure
+      Map<String, List<Map<String, dynamic>>> gridItems = {};
+
+      data.forEach((room, devices) {
+        // Sort the devices by 'Index' in ascending order
+        devices.sort((a, b) => (a['Index'] as int).compareTo(b['Index'] as int));
+
+        // Add sorted devices to the gridItems map
+        gridItems[room] = List<Map<String, dynamic>>.from(devices);
+      });
+
+      this.gridItems =  gridItems;
+      
+      Provider.of<LoginState>(context, listen: false).login();
+
+    } else {
+      throw Exception('Failed to load devices');
+    }
+  }*/
+
+   
+ Map<String, List<Map<String, dynamic>>> gridItems = {
+ 
+};
+
+ Map<String, List<Map<String, dynamic>>> gridItems2 = {
+  "Kitchen2": [
+    {
+      "name": "Lamp 1",
+      "color": Colors.deepOrange,
+      "icon": Icons.lightbulb,
+      "value": true
+    },
+    {
+      "name": "Spotlight 1",
+      "color": Colors.orange,
+      "icon": Icons.light,
+      "value": 0.86
+    },
+    {
+      "name": "AC 2",
+      "color": Colors.purple,
+      "icon": Icons.ac_unit,
+      "value": true
+    },
+    {
+      "name": "Door Lock",
+      "color": Colors.teal,
+      "icon": Icons.lock_outlined,
+      "value": true
+    },
+  ],
+  
+};
+
+final List<String> gridItemsIndexes = ["living room" ];
+final List<String> gridItemsIndexes2 = ["Kitchen2"];
 
 
   // Store token securely
-  Future<void> saveToken(String token) async {
+  Future<void> saveLocalToken(String token) async {
     await _storage.write(key: 'jwt_token', value: token);
   }
 
   // Retrieve token
-  Future<String?> getToken() async {
+  Future<String?> getLocalToken() async {
     return await _storage.read(key: 'jwt_token');
   }
 
   // Login Method
-  Future<Map<String, dynamic>> login( String username, String password) async {
-    final BuildContext context = mainWidgetKey.currentContext!;
+  Future<Map<String, dynamic>> checkToken() async {
+  final url = Uri.parse("$baseUrl/check-token");
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json' , 'Authorization' : await getLocalToken() ?? ""},
+      //body: json.encode({"username": username, "password": password}),
+    );
+      final data = json.decode(response.body);
 
+    if (response.statusCode == 200) {
+      
+      if (data.containsKey("new_token")) {
+        await saveLocalToken(data["new_token"]);
+        final BuildContext context = mainWidgetKey.currentContext!;
+        Provider.of<LoginState>(context, listen: false).setTokenCheck(true);
+        Provider.of<LoginState>(context, listen: false).login();
+        print(data);
+        waitToFetchAndProcessDevices();
+        return {"success": true};
+      } else {
+        return {"success": false, "error": data["error"]};
+      }
+    } else if (response.statusCode == 401 /*Unauthorized*/){
+        final BuildContext context = mainWidgetKey.currentContext!;
+        Provider.of<LoginState>(context, listen: false).setTokenCheck(true);
+        return {"success": false, "error": data["error"]};
+    } else {
+      return {"success": false, "error": "Unexpected server error"};
+    }
+
+  }
+
+  // Login Method
+  Future<Map<String, dynamic>> login( String username, String password) async {
     final url = Uri.parse("$baseUrl/login");
     final response = await http.post(
       url,
@@ -38,8 +234,10 @@ class ApiService {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       if (data.containsKey("token")) {
-        await saveToken(data["token"]);
+        await saveLocalToken(data["token"]);
+        final BuildContext context = mainWidgetKey.currentContext!;
         Provider.of<LoginState>(context, listen: false).login();
+        waitToFetchAndProcessDevices();
         return {"success": true};
       } else {
         return {"success": false, "error": data["error"]};
@@ -65,7 +263,8 @@ class ApiService {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       if (data.containsKey("token")) {
-        await saveToken(data["token"]);
+        await saveLocalToken(data["token"]);
+        waitToFetchAndProcessDevices();
         return {"success": true, "message": data["message"], "token": data["token"]};
       } else {
         return {"success": false, "error": data["Error"] ?? "Unknown error"};

@@ -2,124 +2,12 @@ import 'package:edittable_grid_flutter/main.dart';
 import 'package:edittable_grid_flutter/pages/add_device.dart';
 import 'package:edittable_grid_flutter/pages/ai_assistant.dart';
 import 'package:edittable_grid_flutter/pages/dashboard.dart';
+import 'package:edittable_grid_flutter/stateManagment/login_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:provider/provider.dart';
 
-final Map<String, List<Map<String, dynamic>>> gridItems = {
-  "Kitchen": [
-    {
-      "id" : "1",
-      "name": "Lamp 1",
-      "color": Colors.red,
-      "icon": Icons.lightbulb,
-      "type": "switch",
-      "value": true
-    },
-    {
-      "id" : "1",
-      "name": "Spotlight 1",
-      "color": Colors.orange,
-      "icon": Icons.light,
-      "type": "switch",
-      "value": 0.86
-    },
-    {
-      "id" : "1",
-      "name": "AC 2",
-      "color": Colors.purple,
-      "icon": Icons.ac_unit,
-      "type": "switch",
-      "value": true
-    },
-    {
-      "id" : "1",
-      "name": "Door Lock",
-      "color": Colors.teal,
-      "icon": Icons.lock_outlined,
-      "type": "switch",
-      "value": true
-    },
-  ],
-  "Living Room": [
-    {
-      "id" : "1",
-      "name": "Heater",
-      "color": Colors.pink,
-      "icon": Icons.air_rounded,
-      "type": "switch",
-      "value": true
-    },
-    {
-      "id" : "1",
-      "name": "Lamp 2",
-      "color": Colors.green,
-      "icon": Icons.lightbulb,
-      "type": "switch",
-      "value": true
-    },
-    {
-      "id" : "1",
-      "name": "Lamp 3",
-      "color": Colors.blue,
-      "icon": Icons.lightbulb,
-      "type": "switch",
-      "value": true
-    },
-  ],
-};
-
-final Map<String, List<Map<String, dynamic>>> gridItems2 = {
-  "Kitchen2": [
-    {
-      "name": "Lamp 1",
-      "color": Colors.deepOrange,
-      "icon": Icons.lightbulb,
-      "value": true
-    },
-    {
-      "name": "Spotlight 1",
-      "color": Colors.orange,
-      "icon": Icons.light,
-      "value": 0.86
-    },
-    {
-      "name": "AC 2",
-      "color": Colors.purple,
-      "icon": Icons.ac_unit,
-      "value": true
-    },
-    {
-      "name": "Door Lock",
-      "color": Colors.teal,
-      "icon": Icons.lock_outlined,
-      "value": true
-    },
-  ],
-  "Living Room2": [
-    {
-      "name": "Heater",
-      "color": Colors.red,
-      "icon": Icons.air_rounded,
-      "value": true
-    },
-    {
-      "name": "Lamp 2",
-      "color": Colors.deepOrange,
-      "icon": Icons.lightbulb,
-      "value": true
-    },
-    {
-      "name": "Lamp 3",
-      "color": Colors.deepOrange,
-      "icon": Icons.lightbulb,
-      "value": true
-    },
-  ],
-};
-
-final List<String> gridItemsIndexes = ["Kitchen", "Living Room"];
-final List<String> gridItemsIndexes2 = ["Kitchen2", "Living Room2"];
 
 // ignore: must_be_immutable
 class NavBar extends StatelessWidget {
@@ -173,10 +61,12 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final someValue = context.watch<LoginState>().isLoggedIn;
+
     
     if(!kIsWeb){
    screens = [
-    Dashboard(gridItems: gridItems, gridItemsIndexes: gridItemsIndexes), // Home
+    Dashboard(gridItems: api!.gridItems, gridItemsIndexes: api!.gridItemsIndexes), // Home
     const AIAssistantPage(), // Dashboard
     const NewDevicePage(), // Device Manager 
     Container()
