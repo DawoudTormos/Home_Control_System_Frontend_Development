@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:edittable_grid_flutter/main.dart';
 import 'package:edittable_grid_flutter/stateManagment/login_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +12,7 @@ import 'package:provider/provider.dart';
 
 class MainGrid extends StatefulWidget {
   final Map<String, List<Map<String, dynamic>>>? gridItems;
-  final List<String>? gridItemsIndexes;
+  final List<Map<String, dynamic>>? gridItemsIndexes;
 
 
   const MainGrid(
@@ -121,10 +124,10 @@ return editMode;
         ),
         itemCount: widget.gridItems!.length,
         itemBuilder: (context, index) {
-          final item = widget.gridItems![widget.gridItemsIndexes![index]]!;
+          final item = widget.gridItems![widget.gridItemsIndexes![index]["Name"]]!;
 
           Widget gridItem =
-              EditableGrid(title: widget.gridItemsIndexes![index], data: item);
+              EditableGrid(title: widget.gridItemsIndexes![index]["Name"], data: item);
 
           if (editMode) {
             return Draggable<int>(
@@ -142,6 +145,19 @@ return editMode;
               child: DragTarget<int>(
                 onAcceptWithDetails: (fromIndex) {
                   setState(() {
+                    List<Map<String,dynamic>> requestBody = [];
+                          requestBody.add({
+                                      "ID":widget.gridItemsIndexes![index]["ID"],
+                                      "Type": "room",
+                                      "Index": widget.gridItemsIndexes![fromIndex.data]["Index"]
+                          },);
+                          requestBody.add({
+                                      "ID":widget.gridItemsIndexes![fromIndex.data]["ID"],
+                                      "Type": "room",
+                                      "Index": widget.gridItemsIndexes![index]["Index"]
+                          },);
+                          final jsonBody = jsonEncode(requestBody);
+                          api?.setIndexes(jsonBody);                    
                     final temp =
                         widget.gridItemsIndexes!.removeAt(fromIndex.data);
                     widget.gridItemsIndexes!.insert(index, temp);
@@ -171,10 +187,10 @@ return editMode;
             print(widget.gridItemsIndexes!.length);
             print("\n");            print(index);
             print("\n");
-            final item = widget.gridItems![widget.gridItemsIndexes![index]]!;
+            final item = widget.gridItems![widget.gridItemsIndexes![index]["Name"]]!;
 
             Widget gridItem = EditableGrid(
-                title: widget.gridItemsIndexes![index], data: item);
+                title: widget.gridItemsIndexes![index]["Name"], data: item);
             if (editMode) {
               return Draggable<int>(
                 data: index,
@@ -192,6 +208,21 @@ return editMode;
                 child: DragTarget<int>(
                   onAcceptWithDetails: (fromIndex) {
                     setState(() {
+                      
+                    List<Map<String,dynamic>> requestBody = [];
+                          requestBody.add({
+                                      "ID":widget.gridItemsIndexes![index]["ID"],
+                                      "Type": "room",
+                                      "Index": widget.gridItemsIndexes![fromIndex.data]["Index"]
+                          },);
+                          requestBody.add({
+                                      "ID":widget.gridItemsIndexes![fromIndex.data]["ID"],
+                                      "Type": "room",
+                                      "Index": widget.gridItemsIndexes![index]["Index"]
+                          },);
+                          final jsonBody = jsonEncode(requestBody);
+                          api?.setIndexes(jsonBody);
+                          print(jsonBody);       
                       final temp =
                           widget.gridItemsIndexes!.removeAt(fromIndex.data);
                       widget.gridItemsIndexes!.insert(index, temp);

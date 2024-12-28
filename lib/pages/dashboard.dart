@@ -5,7 +5,7 @@ import "../widgets/Grid_of_Gridviews/main_grid.dart";
 GlobalKey<MainGridState> mainGridKey = GlobalKey();
       
 class Dashboard extends StatelessWidget {
-  final List<String>? gridItemsIndexes;
+  final List<Map<String, dynamic>>? gridItemsIndexes;
   final Map<String, List<Map<String, dynamic>>>? gridItems;
 
   const Dashboard({

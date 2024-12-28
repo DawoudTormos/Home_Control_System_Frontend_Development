@@ -33,6 +33,7 @@ Future<void> waitToFetchAndProcessDevices() async {
 }
 
 Future<void> fetchAndProcessDevices() async {
+  await fetchAndProcessRooms();
     final url = Uri.parse("$baseUrl/secure/getDevices");
       final response = await http.get(url,
       headers:{
@@ -125,6 +126,76 @@ Future<void> fetchAndProcessDevices() async {
 }
 
 
+
+Future<void> fetchAndProcessRooms() async {
+    final url = Uri.parse("$baseUrl/secure/getRooms");
+      final response = await http.get(url,
+      headers:{
+        'Authorization' : await getLocalToken() ?? "",
+      }
+    );
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body) as List<dynamic>;
+
+    // Initialize final map for gridItems
+    final List<Map<String, dynamic>> rooms = [];
+
+    /**/for (var room in data) {
+        rooms.add({
+          "Name":room["Name"] ,
+           "ID" : room["ID"],
+           "Index" : room["Index"],
+           });
+        }
+
+
+      // Check for duplicates and fix indexes
+      final Set<int> seenIndexs = {};
+      bool duplicatesFound = false;
+      int uniqueIndex = 0;
+
+      for (var room in rooms) {
+        if (!seenIndexs.add(room["Index"])) {
+          duplicatesFound = true;
+          break;
+        } 
+      }
+
+      if(duplicatesFound){
+        int index = 0;
+        List<Map<String , dynamic>> requestBody= [];
+        for (var room in rooms) {
+        room["Index"] = index;
+        requestBody.add({
+          "ID":room["ID"],
+          "Type": "room",
+          "Index": room["Index"]
+        });
+        index++;
+      }
+
+        String jsonBody = jsonEncode(requestBody);
+        setIndexes(jsonBody);
+      }
+
+
+      // Sort rooms by index
+      rooms.sort((a, b) => a["Index"].compareTo(b["Index"]));
+      print(rooms);
+
+      // Add processed devices to gridItems
+      this.gridItemsIndexes = rooms;
+    
+      final BuildContext context = mainWidgetKey.currentContext!;
+      Provider.of<LoginState>(context, listen: false).login();
+      Provider.of<LoginState>(context, listen: false).setDataLoaded(true);
+
+  } else {
+    throw Exception('Failed to fetch devices');
+  }
+}
+
 Future<void> setIndexes(String jsonBody) async {
     final url = Uri.parse("$baseUrl/secure/setIndexes");
       final response = await http.post(url,
@@ -178,9 +249,7 @@ Future<void> setIndexes(String jsonBody) async {
   }*/
 
    
- Map<String, List<Map<String, dynamic>>> gridItems = {
- 
-};
+ Map<String, List<Map<String, dynamic>>> gridItems = {};
 
  Map<String, List<Map<String, dynamic>>> gridItems2 = {
   "Kitchen2": [
@@ -212,7 +281,7 @@ Future<void> setIndexes(String jsonBody) async {
   
 };
 
-final List<String> gridItemsIndexes = ["living room" ];
+ List<Map<String, dynamic>> gridItemsIndexes = [];
 final List<String> gridItemsIndexes2 = ["Kitchen2"];
 
 
