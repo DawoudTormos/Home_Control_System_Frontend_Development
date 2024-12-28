@@ -68,34 +68,53 @@ Future<void> fetchAndProcessDevices() async {
           "Color": Color(device["Color"]),
           "Icon": iconData,
           "Type": device["Type"],
+          "SType": device["SType"],
           "Value":  device["Value"],
           "Index": device["Index"],
         };
       }).toList();
 
-      // Sort devices by index
-      deviceList.sort((a, b) => a["Index"].compareTo(b["Index"]));
+
 
       // Check for duplicates and fix indexes
-      final Set<int> seenIDs = {};
+      final Set<int> seenIndexs = {};
+      bool duplicatesFound = false;
       int uniqueIndex = 0;
 
       for (var device in deviceList) {
-        if (!seenIDs.add(device["ID"])) {
-          // Duplicate found, assign new index
-          device["Index"] = uniqueIndex++;
-        } else {
-          // Ensure indexes are in ascending order for unique devices
-          device["Index"] = uniqueIndex++;
-        }
+        if (!seenIndexs.add(device["Index"])) {
+          duplicatesFound = true;
+          break;
+         // device["Index"] = uniqueIndex++;
+        } 
       }
 
+      if(duplicatesFound){
+        int index = 0;
+        List<Map<String , dynamic>> requestBody= [];
+        for (var device in deviceList) {
+        device["Index"] = index;
+        requestBody.add({
+          "ID":device["ID"],
+          "Type": device["SType"],
+          "Index": device["Index"]
+        });
+        index++;
+      }
+
+        String jsonBody = jsonEncode(requestBody);
+        setIndexes(jsonBody);
+      }
+
+
+            // Sort devices by index
+      deviceList.sort((a, b) => a["Index"].compareTo(b["Index"]));
       // Add processed devices to gridItems
       gridItems[room] = deviceList;
     });
 
       this.gridItems =  gridItems;
-
+      print(gridItems);
       final BuildContext context = mainWidgetKey.currentContext!;
       Provider.of<LoginState>(context, listen: false).login();
       Provider.of<LoginState>(context, listen: false).setDataLoaded(true);
@@ -103,6 +122,24 @@ Future<void> fetchAndProcessDevices() async {
   } else {
     throw Exception('Failed to fetch devices');
   }
+}
+
+
+Future<void> setIndexes(String jsonBody) async {
+    final url = Uri.parse("$baseUrl/secure/setIndexes");
+      final response = await http.post(url,
+      headers:{
+        'Authorization' : await getLocalToken() ?? "",
+      },
+      body: jsonBody,
+    );
+
+     if (response.statusCode == 200) {
+      print('Data sent successfully: ${response.body}');
+    } else {
+      print('Failed to send data. Status code: ${response.statusCode}');
+    }
+
 }
 
 

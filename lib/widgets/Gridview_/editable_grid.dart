@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:edittable_grid_flutter/main.dart';
 import 'package:flutter/material.dart';
 import 'grid_item_switch.dart';
 import 'grid_item_slider.dart';
@@ -97,8 +100,22 @@ class _EditableGridState extends State<EditableGrid> {
                     child: DragTarget<int>(
                       onAcceptWithDetails: (fromIndex) {
                         setState(() {
+                          List<Map<String,dynamic>> requestBody = [];
+                          requestBody.add({
+                                      "ID":widget.data[index]["ID"],
+                                      "Type": widget.data[index]["SType"],
+                                      "Index": widget.data[fromIndex.data]["Index"]
+                          },);
+                          requestBody.add({
+                                      "ID":widget.data[fromIndex.data]["ID"],
+                                      "Type": widget.data[fromIndex.data]["SType"],
+                                      "Index": widget.data[index]["Index"]
+                          },);
+                          final jsonBody = jsonEncode(requestBody);
+                          api?.setIndexes(jsonBody);                         
                           final temp = widget.data.removeAt(fromIndex.data);
                           widget.data.insert(index, temp);
+
                         });
                       },
                       builder: (context, candidateData, rejectedData) {
