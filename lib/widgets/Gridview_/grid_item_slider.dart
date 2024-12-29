@@ -1,3 +1,8 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:ffi';
+
+import 'package:edittable_grid_flutter/main.dart';
 import 'package:flutter/material.dart';
 
 class GridItemSlider extends StatefulWidget {
@@ -11,7 +16,34 @@ class GridItemSlider extends StatefulWidget {
 
 class _GridItemSlider extends State<GridItemSlider> {
   _GridItemSlider();
+  double prevSliderValue = 0;
 
+
+ @override
+  void initState() {
+    super.initState();
+    prevSliderValue = widget.item["Value"];
+    // Start the infinite loop
+    _startInfiniteLoop();
+  }
+
+  void _startInfiniteLoop() {
+    Timer.periodic(const Duration(milliseconds: 600), (timer) {
+
+      if(widget.item["Value"] != prevSliderValue){
+        prevSliderValue = widget.item["Value"] ;
+       Map<String,dynamic> requestBody = {};
+
+       requestBody["ID"] = widget.item["ID"];
+       requestBody["Value"] = (widget.item["Value"]*100).toInt();
+
+       final jsonBody = jsonEncode(requestBody);
+       api?.setSwitchValue(jsonBody);     
+      }
+      /*setState(() {      });*/
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;

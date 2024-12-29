@@ -56,10 +56,8 @@ Future<void> fetchAndProcessDevices() async {
           fontFamily: device['IconFamily'],
         );
         if(device["Type"] == 1){
-                    print(device["Value"]);
-
+          //print(device["Value"]);
           device["Value"] = device["Value"].toDouble() / 100 ;
-          print(device["Value"]);
         }else{
           device["Value"] = (device["Value"] > 0.5) as bool ;
         }
@@ -214,6 +212,24 @@ Future<void> setIndexes(String jsonBody) async {
 }
 
 
+
+
+Future<void> setSwitchValue(String jsonBody) async {
+    final url = Uri.parse("$baseUrl/secure/setSwitchValue");
+      final response = await http.post(url,
+      headers:{
+        'Authorization' : await getLocalToken() ?? "",
+      },
+      body: jsonBody,
+    );
+
+     if (response.statusCode == 200) {
+      print('Data sent successfully: ${response.body}');
+    } else {
+      print('Failed to send data. Status code: ${response.statusCode}.\nError: ${response.body}');
+    }
+
+}
   /*Future<void> fetchDevices() async {
     final BuildContext context = mainWidgetKey.currentContext!;
     final url = Uri.parse("$baseUrl/secure/getDevices");

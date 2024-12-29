@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:edittable_grid_flutter/main.dart';
 import 'package:flutter/material.dart';
 
 class GridItemSwitch extends StatefulWidget {
@@ -13,6 +17,32 @@ class GridItemSwitch extends StatefulWidget {
 
 class _GridItemSwitchState extends State<GridItemSwitch> {
   _GridItemSwitchState();
+bool prevSwitchValue = false;
+
+  
+ @override
+  void initState() {
+    super.initState();
+    prevSwitchValue = widget.item["Value"];
+    // Start the infinite loop
+    _startInfiniteLoop();
+  }
+
+  void _startInfiniteLoop() {
+    Timer.periodic(const Duration(milliseconds: 600), (timer) {
+      if(widget.item["Value"] != prevSwitchValue){
+        prevSwitchValue = widget.item["Value"] ;
+       Map<String,dynamic> requestBody = {};
+
+       requestBody["ID"] = widget.item["ID"];
+       requestBody["Value"] = widget.item["Value"]? 1 :0;
+
+       final jsonBody = jsonEncode(requestBody);
+       api?.setSwitchValue(jsonBody);     
+      }
+      /*setState(() {      });*/
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
