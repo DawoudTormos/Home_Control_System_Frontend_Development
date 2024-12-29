@@ -1,5 +1,5 @@
-import 'package:edittable_grid_flutter/main.dart';
-import 'package:edittable_grid_flutter/pages/signup.dart';
+import 'package:hcs_project/main.dart';
+import 'package:hcs_project/pages/signup.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {

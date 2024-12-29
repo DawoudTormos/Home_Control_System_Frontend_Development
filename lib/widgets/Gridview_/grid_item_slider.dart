@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
 
-import 'package:edittable_grid_flutter/main.dart';
+import 'package:hcs_project/main.dart';
 import 'package:flutter/material.dart';
 
 class GridItemSlider extends StatefulWidget {

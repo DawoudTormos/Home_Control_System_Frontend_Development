@@ -1,6 +1,6 @@
-import 'package:edittable_grid_flutter/main.dart';
-import 'package:edittable_grid_flutter/pages/dashboard.dart';
-import 'package:edittable_grid_flutter/widgets/navbar.dart';
+import 'package:hcs_project/main.dart';
+import 'package:hcs_project/pages/dashboard.dart';
+import 'package:hcs_project/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 
 class MainMobile extends StatefulWidget {

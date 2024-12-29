@@ -1,4 +1,4 @@
-import 'package:edittable_grid_flutter/pages/add_devices_sub_pages/QRcode_scanner_controller.dart';
+import 'package:hcs_project/pages/add_devices_sub_pages/QRcode_scanner_controller.dart';
 import 'package:flutter/material.dart';
 
 class ScanQrInfoPage extends StatelessWidget {

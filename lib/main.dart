@@ -1,9 +1,9 @@
-import 'package:edittable_grid_flutter/api/api_service.dart';
-import 'package:edittable_grid_flutter/main_mobile.dart';
-import 'package:edittable_grid_flutter/main_web.dart';
-import 'package:edittable_grid_flutter/pages/loading_page.dart';
-import 'package:edittable_grid_flutter/pages/login.dart';
-import 'package:edittable_grid_flutter/stateManagment/login_state.dart';
+import 'package:hcs_project/api/api_service.dart';
+import 'package:hcs_project/main_mobile.dart';
+import 'package:hcs_project/main_web.dart';
+import 'package:hcs_project/pages/loading_page.dart';
+import 'package:hcs_project/pages/login.dart';
+import 'package:hcs_project/stateManagment/login_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

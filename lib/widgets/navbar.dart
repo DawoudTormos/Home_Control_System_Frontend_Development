@@ -1,8 +1,9 @@
-import 'package:edittable_grid_flutter/main.dart';
-import 'package:edittable_grid_flutter/pages/add_device.dart';
-import 'package:edittable_grid_flutter/pages/ai_assistant.dart';
-import 'package:edittable_grid_flutter/pages/dashboard.dart';
-import 'package:edittable_grid_flutter/stateManagment/login_state.dart';
+import 'package:hcs_project/main.dart';
+import 'package:hcs_project/pages/add_device.dart';
+import 'package:hcs_project/pages/ai_assistant.dart';
+import 'package:hcs_project/pages/dashboard.dart';
+import 'package:hcs_project/pages/device_manager.dart';
+import 'package:hcs_project/stateManagment/login_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -68,7 +69,7 @@ class NavBar extends StatelessWidget {
    screens = [
     Dashboard(gridItems: api!.gridItems, gridItemsIndexes: api!.gridItemsIndexes), // Home
     const AIAssistantPage(), // Dashboard
-    const NewDevicePage(), // Device Manager 
+     DeviceManager(), // Device Manager 
     Container()
   ];
 

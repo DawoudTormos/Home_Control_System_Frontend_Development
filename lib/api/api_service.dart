@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:ffi';
-import 'package:edittable_grid_flutter/stateManagment/login_state.dart';
+import 'package:hcs_project/stateManagment/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,17 +14,13 @@ class ApiService {
 
      ApiService({required this.mainWidgetKey}) {
 
-    _delayedAction();
+    _delayedCheckToken();
 
   }
-  Future<void> _delayedAction() async {
+
+  Future<void> _delayedCheckToken() async {
     await Future.delayed(Duration(milliseconds: 500));
-
-    // Code to execute after the delay
-    //print('Action performed after 250 milliseconds!');
      checkToken();
-
-
   }
 
 Future<void> waitToFetchAndProcessDevices() async {

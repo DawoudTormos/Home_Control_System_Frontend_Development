@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:edittable_grid_flutter/pages/add_devices_sub_pages/components/scanner_button_widgets.dart';
-import 'package:edittable_grid_flutter/pages/add_devices_sub_pages/components/scanner_error_widget.dart';
+import 'package:hcs_project/pages/add_devices_sub_pages/components/scanner_button_widgets.dart';
+import 'package:hcs_project/pages/add_devices_sub_pages/components/scanner_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 

@@ -1,4 +1,4 @@
-import 'package:edittable_grid_flutter/web_router/app_router.dart';
+import 'package:hcs_project/web_router/app_router.dart';
 import 'package:flutter/material.dart';
 
 class MainWeb extends StatelessWidget {

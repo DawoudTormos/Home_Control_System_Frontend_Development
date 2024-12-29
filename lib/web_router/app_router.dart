@@ -1,5 +1,5 @@
-import 'package:edittable_grid_flutter/main.dart';
-import 'package:edittable_grid_flutter/pages/ai_assistant.dart';
+import 'package:hcs_project/main.dart';
+import 'package:hcs_project/pages/ai_assistant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../pages/dashboard.dart';

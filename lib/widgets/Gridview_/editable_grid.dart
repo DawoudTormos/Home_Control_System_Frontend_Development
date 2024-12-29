@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:edittable_grid_flutter/main.dart';
+import 'package:hcs_project/main.dart';
 import 'package:flutter/material.dart';
 import 'grid_item_switch.dart';
 import 'grid_item_slider.dart';

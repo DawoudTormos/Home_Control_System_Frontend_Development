@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:edittable_grid_flutter/main.dart';
-import 'package:edittable_grid_flutter/stateManagment/login_state.dart';
+import 'package:hcs_project/main.dart';
+import 'package:hcs_project/stateManagment/login_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import "package:edittable_grid_flutter/widgets/gridview_/editable_grid.dart";
+import "package:hcs_project/widgets/gridview_/editable_grid.dart";
 import 'package:provider/provider.dart';
 
 
