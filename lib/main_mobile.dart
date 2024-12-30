@@ -56,7 +56,7 @@ class _MainMobileState extends State<MainMobile> {
                   setState(() {
                   });
                 },
-                  child: Icon(gridEditMode ? Icons.save : Icons.edit),
+                  child: Icon(gridEditMode ? Icons.save : Icons.edit, color: Colors.black,),
                 ),
             ],
           ),

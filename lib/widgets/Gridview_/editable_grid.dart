@@ -56,7 +56,7 @@ class _EditableGridState extends State<EditableGrid> {
                       editMode = !editMode;
                     });
                   },
-                  child: Icon(editMode ? Icons.save : Icons.edit),
+                  child: Icon(editMode ? Icons.save : Icons.edit, color: Colors.black,),
                 ),
               ],
             ),
