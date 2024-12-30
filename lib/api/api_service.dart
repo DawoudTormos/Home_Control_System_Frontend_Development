@@ -239,7 +239,7 @@ Future<void> addRoom(String jsonBody) async {
       body: jsonBody,
     );
 
-     fetchAndProcessRooms();
+     fetchAndProcessDevices();// and rooms
      if (response.statusCode == 200) {
       print('Data sent successfully: ${response.body}');
     } else {

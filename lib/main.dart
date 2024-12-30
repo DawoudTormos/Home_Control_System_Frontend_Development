@@ -61,6 +61,9 @@ class _MyAppState extends State<MyApp> {
     
 
   }
+
+
+  
   
    Widget isTokenChecked(bool isTokenChecked, bool isLoggedIn, bool isDataLoaded ){
 
@@ -103,3 +106,10 @@ class _MyAppState extends State<MyApp> {
   }
 
 }
+
+
+
+
+  String capitalize(str) {
+    return "${str[0].toUpperCase()}${str.substring(1)}";
+  }

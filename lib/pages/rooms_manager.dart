@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hcs_project/main.dart';
+import 'package:hcs_project/pages/devices_manager.dart';
 import 'package:hcs_project/stateManagment/data_update_state.dart';
 import 'package:provider/provider.dart'; // Import your API object
 
@@ -16,6 +17,7 @@ class _DeviceManagerState extends State<DeviceManager> {
 
   @override
   Widget build(BuildContext context) {
+      final double screenWidth = MediaQuery.of(context).size.width;
       int updateCount = context.watch<DataUpdateState>().updateCount;
       String addRoomTextFieldValue = "";
 
@@ -32,21 +34,19 @@ class _DeviceManagerState extends State<DeviceManager> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 25.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 25.0),
                   child: Text(
                     'Rooms',
                     style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                    fontSize: screenWidth < 430 ? 20 : 24,
+                    fontWeight: FontWeight.bold),
                   ),
                 ),
             // Add Room Button
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5.0),
-              child: ElevatedButton(
+              child: IconButton(
                 onPressed: () {
                   // Open the modal to add a new room
              showDialog(
@@ -122,7 +122,7 @@ class _DeviceManagerState extends State<DeviceManager> {
                   padding: const EdgeInsets.symmetric(horizontal: -10, vertical: 3),
                   
                 ),
-                child: Icon(Icons.add, size: 40,color: Colors.black,),
+                icon:  const Icon(Icons.add, size: 28,color: Colors.black,),
 
               ),
             )
@@ -133,41 +133,44 @@ class _DeviceManagerState extends State<DeviceManager> {
           ),
           // GridView for displaying rooms
           Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Number of columns
-                childAspectRatio: 1.2, // Aspect ratio for each item (smaller rooms)
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 17),
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1.5,
+                ),
+                itemCount: gridItemsIndexes.length,
+                itemBuilder: (context, index) {
+                  final room = gridItemsIndexes[index];
+                  //print(room);
+                  return GestureDetector(
+                    onTap: () {
+                      
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DevicesRoom(room: room),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      color: Colors.white,
+                      elevation: 2, 
+                      margin: const EdgeInsets.all(12), // Slightly larger margin for spacing
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: Colors.black, width: 2), // Black border for the rooms
+                        borderRadius: BorderRadius.circular(8), // Rounded corners
+                      ),
+                      child: Center(
+                        child: Text(
+                          capitalize(room['Name']),
+                          style: TextStyle(fontSize: screenWidth < 430 ? 17 : 21, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
-              itemCount: gridItemsIndexes.length,
-              itemBuilder: (context, index) {
-                final room = gridItemsIndexes[index];
-
-                return GestureDetector(
-                  onTap: () {
-                    // Navigate to another page and pass the selected room
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => AnotherPage(room: room),
-                      ),
-                    );
-                  },
-                  child: Card(
-                    color: Colors.white,
-                    elevation: 2, // Slight elevation for the card
-                    margin: const EdgeInsets.all(12), // Slightly larger margin for spacing
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.black, width: 2), // Black border for the rooms
-                      borderRadius: BorderRadius.circular(8), // Rounded corners
-                    ),
-                    child: Center(
-                      child: Text(
-                        room['Name'],
-                        style: const TextStyle(fontSize: 20, color: Colors.black),
-                      ),
-                    ),
-                  ),
-                );
-              },
             ),
           ),
 
@@ -195,3 +198,7 @@ class AnotherPage extends StatelessWidget {
     );
   }
 }
+
+
+
+

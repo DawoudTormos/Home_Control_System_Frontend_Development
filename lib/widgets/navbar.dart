@@ -2,7 +2,7 @@ import 'package:hcs_project/main.dart';
 import 'package:hcs_project/pages/add_device.dart';
 import 'package:hcs_project/pages/ai_assistant.dart';
 import 'package:hcs_project/pages/dashboard.dart';
-import 'package:hcs_project/pages/device_manager.dart';
+import 'package:hcs_project/pages/rooms_manager.dart';
 import 'package:hcs_project/stateManagment/login_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
