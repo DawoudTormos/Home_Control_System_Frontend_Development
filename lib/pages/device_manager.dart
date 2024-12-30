@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:hcs_project/main.dart'; // Import your API object
+import 'package:hcs_project/main.dart';
+import 'package:hcs_project/stateManagment/data_update_state.dart';
+import 'package:provider/provider.dart'; // Import your API object
 
 class DeviceManager extends StatefulWidget {
   const DeviceManager({super.key});
@@ -9,8 +13,12 @@ class DeviceManager extends StatefulWidget {
 }
 
 class _DeviceManagerState extends State<DeviceManager> {
+
   @override
   Widget build(BuildContext context) {
+      int updateCount = context.watch<DataUpdateState>().updateCount;
+      String addRoomTextFieldValue = "";
+
     // Access the grid items from the API
     final List<Map<String, dynamic>> gridItemsIndexes = api!.gridItemsIndexes;
 
@@ -75,37 +83,68 @@ class _DeviceManagerState extends State<DeviceManager> {
             child: ElevatedButton(
               onPressed: () {
                 // Open the modal to add a new room
-                showDialog(
+           showDialog(
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text('Enter Room Name'),
+                      title: const Text(
+                        'Enter Room Name',
+                        style: TextStyle(color: Colors.black), // Black title text
+                      ),
+                      surfaceTintColor: Colors.white, // Remove tint
+                      backgroundColor: Colors.white, // White background for the dialog
+
                       content: TextField(
                         autofocus: true,
-                        decoration: const InputDecoration(hintText: 'Room Name'),
-                        onSubmitted: (value) {
-                          // Handle adding the room (you can customize this part)
-                          Navigator.pop(context);
+                        decoration: const InputDecoration(
+                          hintText: 'Room Name',
+                          hintStyle: TextStyle(color: Colors.grey), // Grey hint text for visibility
+                          border: UnderlineInputBorder(),
+                          enabledBorder: UnderlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.black), // Black underline when enabled
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.black), // Black underline when focused
+                        ), 
+                        ),
+                        style: const TextStyle(
+                          color: Colors.black, // Black text color
+                        ),
+                        onChanged: (value) {
+                          addRoomTextFieldValue = value;
+                          //Navigator.pop(context);
                         },
+                        
                       ),
                       actions: [
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context); // Close the modal
                           },
-                          child: const Text('Cancel'),
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(color: Colors.black), // Black text for Cancel button
+                          ),
                         ),
                         TextButton(
                           onPressed: () {
-                            // Call your method to add the room here
+                          //print(addRoomTextFieldValue);
+                          Map<String,String> requestBody = {};
+                          requestBody["Name"] = addRoomTextFieldValue;
+                          String jsonBody = jsonEncode(requestBody);
+                          api?.addRoom(jsonBody);
                             Navigator.pop(context); // Close the modal
                           },
-                          child: const Text('Add'),
+                          child: const Text(
+                            'Add',
+                            style: TextStyle(color: Colors.black), // Black text for Add button
+                          ),
                         ),
                       ],
                     );
                   },
                 );
+
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white, backgroundColor: Colors.black, // White text

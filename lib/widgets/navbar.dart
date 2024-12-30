@@ -62,7 +62,7 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        final someValue = context.watch<LoginState>().isLoggedIn;
+        //final someValue = context.watch<LoginState>().isLoggedIn;
 
     
     if(!kIsWeb){

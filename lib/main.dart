@@ -3,6 +3,7 @@ import 'package:hcs_project/main_mobile.dart';
 import 'package:hcs_project/main_web.dart';
 import 'package:hcs_project/pages/loading_page.dart';
 import 'package:hcs_project/pages/login.dart';
+import 'package:hcs_project/stateManagment/data_update_state.dart';
 import 'package:hcs_project/stateManagment/login_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ void main() {
       providers: [
         //ChangeNotifierProvider(create: (context) => ThemeManager()),
         ChangeNotifierProvider(create: (context) => LoginState()),
+        ChangeNotifierProvider(create: (context) => DataUpdateState()),
       ],
       child: MyApp(key: mainKey),
     ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:hcs_project/stateManagment/data_update_state.dart';
 import 'package:hcs_project/stateManagment/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -182,8 +183,8 @@ Future<void> fetchAndProcessRooms() async {
       this.gridItemsIndexes = rooms;
     
       final BuildContext context = mainWidgetKey.currentContext!;
-      Provider.of<LoginState>(context, listen: false).login();
-      Provider.of<LoginState>(context, listen: false).setDataLoaded(true);
+      Provider.of<DataUpdateState>(context, listen: false).alertDataUpdated();
+      
 
   } else {
     throw Exception('Failed to fetch devices');
@@ -218,7 +219,27 @@ Future<void> setSwitchValue(String jsonBody) async {
       },
       body: jsonBody,
     );
+     if (response.statusCode == 200) {
+      print('Data sent successfully: ${response.body}');
+    } else {
+      print('Failed to send data. Status code: ${response.statusCode}.\nError: ${response.body}');
+    }
 
+}
+
+
+
+
+Future<void> addRoom(String jsonBody) async {
+    final url = Uri.parse("$baseUrl/secure/addRoom");
+      final response = await http.post(url,
+      headers:{
+        'Authorization' : await getLocalToken() ?? "",
+      },
+      body: jsonBody,
+    );
+
+     fetchAndProcessRooms();
      if (response.statusCode == 200) {
       print('Data sent successfully: ${response.body}');
     } else {
