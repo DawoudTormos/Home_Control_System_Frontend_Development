@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 
 class NewDevicePage extends StatefulWidget {
-  const NewDevicePage({super.key});
+  Map<String,dynamic> room;
+   NewDevicePage({super.key, required this.room});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -31,12 +32,12 @@ class _NewDevicePageState extends State<NewDevicePage> {
   ];
 
   final List<String> subTypes = [
-    "sensor-power",
-    "sensor-temp",
-    "sensor-motion",
-    "switch-onoff",
-    "switch-dimmer",
-    "camera"
+    "Power Sensor",
+    "Temperature Sensor",
+    "motion Sensor",
+    "ON/OFF Switch",
+    "Dimmer Switch",
+    "Camera"
     // Sub-type can be nullable
   ];
 
@@ -46,7 +47,8 @@ class _NewDevicePageState extends State<NewDevicePage> {
     print(name);
     print(selectedIcon);
     print(selectedColor);
-    if (name.isEmpty || selectedIcon == null || selectedColor == null ) {
+    if (name.isEmpty || selectedColor == null || 
+        ((selectedSubType == "Dimmer Switch" || selectedSubType == "ON/OFF Switch") && selectedIcon == null)) {
       // Show an error if any field is empty or not selected
       ScaffoldMessenger.of(context).showSnackBar(
         
@@ -62,25 +64,19 @@ class _NewDevicePageState extends State<NewDevicePage> {
       return;
     }
 
+    // Create a map with the collected data
+    final Map<String, dynamic> deviceData = {
+      'deviceName': name,
+      'color': selectedColor,
+      'icon': selectedIcon,
+      'roomId': widget.room['id'],
+    };
 
-  Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const ScanQrInfoPage(),
-              ),
-            );
-    // Navigate to the next page with the data
-    /*Navigator.pushNamed(
-      context,
-      '/QRScannerPage',
-      arguments: {
-        'deviceName': name,
-        //'room': dropdownValue,
-        'icon': selectedIcon,
-        'color': selectedColor,
-      },
-    );*/
-
-
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ScanQrInfoPage(deviceData: deviceData),
+      ),
+    );
   }
 
 
@@ -123,9 +119,9 @@ class _NewDevicePageState extends State<NewDevicePage> {
           child: SingleChildScrollView(
 
             child: SizedBox(
-              height: 1000,
+              height: (selectedSubType == "Dimmer Switch" || selectedSubType == "ON/OFF Switch") ? 1000 : 600,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   // Page title as text
@@ -143,9 +139,14 @@ class _NewDevicePageState extends State<NewDevicePage> {
                   // Device Name
                   const Text("Enter Device Name:"),
                   TextField(
+                    cursorColor: Colors.black,
                     decoration: const InputDecoration(
                       labelText: "Device Name",
+                      labelStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
                     ),
                     onChanged: (value) => setState(() => deviceName = value),
                   ),
@@ -178,56 +179,13 @@ class _NewDevicePageState extends State<NewDevicePage> {
                   ),
                   const SizedBox(height: 20),
               
-                  // Icon Picker with Search
-                  const Text("Choose an Icon:"),
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: "Search Icon",
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (value) {
-                      setState(() => iconSearchQuery = value);
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 180,
-                    
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: GridView.builder(
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 5,
-                          crossAxisSpacing: 8.0,
-                          mainAxisSpacing: 8.0,
-                        ),
-                        itemCount: filteredIcons.length,
-                        itemBuilder: (context, index) {
-                          final icon = filteredIcons[index];
-                          return GestureDetector(
-                            onTap: () => setState(() => selectedIcon = icon),
-                            child: Icon(
-                              icon,
-                              color: selectedIcon == icon
-                                  ? Colors.blue
-                                  : Colors.black,
-                              size: 32.0,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-              
-                  
-              
                   // Sub-type Dropdown
                   const Text("Choose Device Type:"),
                   DropdownButton<String?>(
                     value: selectedSubType,
                     hint: const Text("Select Device Type"),
                     isExpanded: true,
+                    dropdownColor: Colors.white,
                     items: subTypes.map((subType) {
                       return DropdownMenuItem(
                         value: subType,
@@ -237,20 +195,74 @@ class _NewDevicePageState extends State<NewDevicePage> {
                     onChanged: (value) => setState(() => selectedSubType = value),
                   ),
                   const SizedBox(height: 20),
-              
-                  // Submit Button
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.grey[850],
-                      elevation: 0,
-                      overlayColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
+
+                  // Icon Picker with Search (conditionally displayed)
+                  if (selectedSubType == "Dimmer Switch" || selectedSubType == "ON/OFF Switch") ...[
+                    const Text("Choose an Icon:"),
+                    TextField(
+                      cursorColor: Colors.black,
+                      decoration: const InputDecoration(
+                        labelText: "Search Icon",
+                        labelStyle: TextStyle(color: Colors.black),
+                        border: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                        ),
+                        focusColor: Colors.black,
+                        iconColor: Colors.black,
+                        fillColor: Colors.black,
+                      ),
+                      onChanged: (value) {
+                        setState(() => iconSearchQuery = value);
+                      },
                     ),
-                    onPressed: () {
-                      navigateToNextPage();
-                    },
-                    child: const Text("Link Device"),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 180,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: GridView.builder(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 5,
+                            crossAxisSpacing: 8.0,
+                            mainAxisSpacing: 8.0,
+                          ),
+                          itemCount: filteredIcons.length,
+                          itemBuilder: (context, index) {
+                            final icon = filteredIcons[index];
+                            return GestureDetector(
+                              onTap: () => setState(() => selectedIcon = icon),
+                              child: Icon(
+                                icon,
+                                color: selectedIcon == icon
+                                    ? Colors.blue
+                                    : Colors.black,
+                                size: 32.0,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+
+                  // Submit Button
+                  SizedBox(
+                    width: 130,
+                    child: ElevatedButton(
+                    
+                       style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white, // White background
+                          foregroundColor: Colors.black, // Black text
+                          side: const BorderSide(color: Colors.black, width: 2), // Black border
+                      
+                        ),
+                      onPressed: () {
+                        navigateToNextPage();
+                      },
+                      child: const Text("Link Device"),
+                    ),
                   ),
                 ],
               ),

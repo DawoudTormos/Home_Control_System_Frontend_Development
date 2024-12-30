@@ -2,7 +2,8 @@ import 'package:hcs_project/pages/add_devices_sub_pages/QRcode_scanner_controlle
 import 'package:flutter/material.dart';
 
 class ScanQrInfoPage extends StatelessWidget {
-  const ScanQrInfoPage({super.key});
+  final Map<String,dynamic> deviceData;
+  const ScanQrInfoPage({super.key, required this.deviceData});
 
   @override
   Widget build(BuildContext context) {

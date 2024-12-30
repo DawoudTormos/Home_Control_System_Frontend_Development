@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hcs_project/main.dart';
+import 'package:hcs_project/pages/add_device.dart';
 
 class DevicesRoom extends StatelessWidget {
   final Map<String, dynamic> room;
@@ -31,20 +32,11 @@ class DevicesRoom extends StatelessWidget {
           children: [
             // Title and Add Icon Row
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   room['Name'],
                   style: TextStyle(fontSize: screenWidth < 430 ? 20 : 24 ,fontWeight: FontWeight.bold, color: Colors.black), // White text
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add, size: 28, color: Colors.black), // White icon
-                  onPressed: () {
-                    // Navigate to add device page (to be implemented)
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => AddDevicePage(), // Replace with your actual page
-                    ));
-                  },
                 ),
               ],
             ),
@@ -61,6 +53,20 @@ class DevicesRoom extends StatelessWidget {
                 },
               ),
             ),
+                      ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // White background
+                        foregroundColor: Colors.black, // Black text
+                        side: const BorderSide(color: Colors.black, width: 2), // Black border
+                      ),
+                      child: const Text("Add Device"), 
+                      onPressed: () {
+                        // Navigate to add device page (to be implemented)
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => NewDevicePage(room: room), // Replace with your actual page
+                        ));
+                      },
+                ),
           ],
         ),
       ),
@@ -139,18 +145,7 @@ class DeviceTable extends StatelessWidget {
 }
 
 
-// Placeholder for AddDevicePage (to be implemented later)
-class AddDevicePage extends StatelessWidget {
-  const AddDevicePage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Add Device")),
-      body: Center(child: Text("Add Device Page")),
-    );
-  }
-}
 
 
 
