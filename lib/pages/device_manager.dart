@@ -27,15 +27,108 @@ class _DeviceManagerState extends State<DeviceManager> {
       body: Column(
         children: [
           // Centered Title
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 40.0),
-            child: Text(
-              'Rooms',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 25.0),
+                  child: Text(
+                    'Rooms',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+            // Add Room Button
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Open the modal to add a new room
+             showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text(
+                          'Enter Room Name',
+                          style: TextStyle(color: Colors.black), // Black title text
+                        ),
+                        surfaceTintColor: Colors.white, // Remove tint
+                        backgroundColor: Colors.white, // White background for the dialog
+            
+                        content: TextField(
+                          autofocus: true,
+                          decoration: const InputDecoration(
+                            hintText: 'Room Name',
+                            hintStyle: TextStyle(color: Colors.grey), // Grey hint text for visibility
+                            border: UnderlineInputBorder(),
+                            enabledBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black), // Black underline when enabled
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black), // Black underline when focused
+                          ), 
+                          ),
+                          style: const TextStyle(
+                            color: Colors.black, // Black text color
+                          ),
+                          onChanged: (value) {
+                            addRoomTextFieldValue = value;
+                            //Navigator.pop(context);
+                          },
+                          
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context); // Close the modal
+                            },
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(color: Colors.black), // Black text for Cancel button
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                            //print(addRoomTextFieldValue);
+                            Map<String,String> requestBody = {};
+                            requestBody["Name"] = addRoomTextFieldValue;
+                            String jsonBody = jsonEncode(requestBody);
+                            api?.addRoom(jsonBody);
+                              Navigator.pop(context); // Close the modal
+                            },
+                            child: const Text(
+                              'Add',
+                              style: TextStyle(color: Colors.black), // Black text for Add button
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+            
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.black, backgroundColor: Colors.transparent, // White text
+                    elevation:0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide.none,
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: -10, vertical: 3),
+                  
+                ),
+                child: Icon(Icons.add, size: 40,color: Colors.black,),
+
               ),
+            )
+            
+            
+              ],
             ),
           ),
           // GridView for displaying rooms
@@ -77,85 +170,7 @@ class _DeviceManagerState extends State<DeviceManager> {
               },
             ),
           ),
-          // Add Room Button
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
-            child: ElevatedButton(
-              onPressed: () {
-                // Open the modal to add a new room
-           showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text(
-                        'Enter Room Name',
-                        style: TextStyle(color: Colors.black), // Black title text
-                      ),
-                      surfaceTintColor: Colors.white, // Remove tint
-                      backgroundColor: Colors.white, // White background for the dialog
 
-                      content: TextField(
-                        autofocus: true,
-                        decoration: const InputDecoration(
-                          hintText: 'Room Name',
-                          hintStyle: TextStyle(color: Colors.grey), // Grey hint text for visibility
-                          border: UnderlineInputBorder(),
-                          enabledBorder: UnderlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black), // Black underline when enabled
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black), // Black underline when focused
-                        ), 
-                        ),
-                        style: const TextStyle(
-                          color: Colors.black, // Black text color
-                        ),
-                        onChanged: (value) {
-                          addRoomTextFieldValue = value;
-                          //Navigator.pop(context);
-                        },
-                        
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context); // Close the modal
-                          },
-                          child: const Text(
-                            'Cancel',
-                            style: TextStyle(color: Colors.black), // Black text for Cancel button
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                          //print(addRoomTextFieldValue);
-                          Map<String,String> requestBody = {};
-                          requestBody["Name"] = addRoomTextFieldValue;
-                          String jsonBody = jsonEncode(requestBody);
-                          api?.addRoom(jsonBody);
-                            Navigator.pop(context); // Close the modal
-                          },
-                          child: const Text(
-                            'Add',
-                            style: TextStyle(color: Colors.black), // Black text for Add button
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                );
-
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Colors.black, // White text
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-              ),
-              child: const Text('Add Room'),
-            ),
-          ),
         ],
       ),
     );
