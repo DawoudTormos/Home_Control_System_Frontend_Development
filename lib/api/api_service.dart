@@ -247,6 +247,26 @@ Future<void> addRoom(String jsonBody) async {
     }
 
 }
+
+
+
+Future<String> checkDeviceExists(String jsonBody) async {
+    final url = Uri.parse("$baseUrl/secure/checkDeviceExists");
+      final response = await http.post(url,
+      headers:{
+        'Authorization' : await getLocalToken() ?? "",
+      },
+      body: jsonBody,
+    );
+
+     if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return "error";
+      //print('Failed to send data. Status code: ${response.statusCode}.\nError: ${response.body}');
+    }
+
+}
   /*Future<void> fetchDevices() async {
     final BuildContext context = mainWidgetKey.currentContext!;
     final url = Uri.parse("$baseUrl/secure/getDevices");

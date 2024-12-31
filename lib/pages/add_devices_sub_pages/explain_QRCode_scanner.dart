@@ -2,6 +2,7 @@ import 'package:hcs_project/pages/add_devices_sub_pages/QRcode_scanner_controlle
 import 'package:flutter/material.dart';
 
 class ScanQrInfoPage extends StatelessWidget {
+
   final Map<String,dynamic> deviceData;
   const ScanQrInfoPage({super.key, required this.deviceData});
 
@@ -39,7 +40,7 @@ class ScanQrInfoPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>  const QRScannerWithController(),
+                      builder: (context) =>   QRScannerWithController(deviceData: deviceData),
                     ),
                   );
                 },

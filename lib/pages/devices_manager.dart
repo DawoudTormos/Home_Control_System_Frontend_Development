@@ -9,7 +9,7 @@ class DevicesRoom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     // Accessing devices from the API
     List<Map<String, dynamic>> devices = api!.gridItems[room['Name']] ?? [];
@@ -77,8 +77,9 @@ class DevicesRoom extends StatelessWidget {
 class DeviceTable extends StatelessWidget {
   final String sType;
   final List<Map<String, dynamic>> devices;
+  final List<String> sensorTypes = ["Power", "Temperature","Motion"];
 
-  const DeviceTable({super.key, required this.sType, required this.devices});
+   DeviceTable({super.key, required this.sType, required this.devices});
 
   @override
   Widget build(BuildContext context) {
@@ -122,10 +123,18 @@ class DeviceTable extends StatelessWidget {
                       DataColumn(label: Text('Color', style: TextStyle(color: Colors.black))),
                     ],
                     rows: devices.map((device) {
+                      var type = "";
+                      if(device['SType'] == "switch"){
+                        type = (device['Type']==0 ? "ON/OFF" : "Dimmer") + "\n Switch";
+                      }else if(device['SType'] == "camera"){
+                        type = "Camera";
+                      }else if(device['SType'] == "sensor"){
+                        type = sensorTypes[device['Type']] + "\n Sensor";
+                      }
                       return DataRow(cells: [
-                        DataCell(Icon(device['Icon'], color: Colors.black)), // Black icon
-                        DataCell(Text(device['Name'], style: TextStyle(color: Colors.black,fontSize: screenWidth < 430 ? 15 : 19))), 
-                        DataCell(Text(device['SType'], style: TextStyle(color: Colors.black,fontSize: screenWidth < 430 ? 15 : 19))),
+                        DataCell(Icon(device['Icon'], color: Colors.black, size: 23,)), // Black icon
+                        DataCell(Text(device['Name'], style: TextStyle(color: Colors.black,fontSize: screenWidth < 430 ? 13 : 17))), 
+                        DataCell(Text(type, style: TextStyle(color: Colors.black,fontSize: screenWidth < 430 ? 12 : 16))),
                         DataCell(Container(
                           width: 15,
                           height: 15,

@@ -3,7 +3,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class AnalyzeImageFromGalleryButton extends StatelessWidget {
-  const AnalyzeImageFromGalleryButton({required this.controller, super.key});
+    // ignore: non_constant_identifier_names
+    final void Function(BarcodeCapture barcodes) handleBarcode;
+   AnalyzeImageFromGalleryButton({required this.controller, required this.handleBarcode, super.key });
 
   final MobileScannerController controller;
 
@@ -41,8 +43,9 @@ class AnalyzeImageFromGalleryButton extends StatelessWidget {
                 content: Text('No barcode found!'),
                 backgroundColor: Colors.red,
               );
-
+        handleBarcode(barcodes!);
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
+
       },
     );
   }

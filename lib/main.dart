@@ -11,6 +11,17 @@ import 'package:provider/provider.dart';
 import 'web_router/app_router.dart';
 
 
+  final List<String> subTypes = [
+    "Power Sensor",
+    "Temperature Sensor",
+    "Motion Sensor",
+    "ON/OFF Switch",
+    "Dimmer Switch",
+    "Camera"
+    // Sub-type can be nullable
+  ];
+  
+
 String currentPage = "Dashboard";
 ApiService? api;
 

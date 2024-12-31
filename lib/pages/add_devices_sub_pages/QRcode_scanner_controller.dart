@@ -1,12 +1,26 @@
 import 'dart:async';
+import 'package:hcs_project/main.dart';
 import 'package:hcs_project/pages/add_devices_sub_pages/components/scanner_button_widgets.dart';
 import 'package:hcs_project/pages/add_devices_sub_pages/components/scanner_error_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hcs_project/pages/wait_link.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'dart:convert';
 
+final List<String> types = [
+    "Power_Sensor",
+    "Temperature_Sensor",
+    "Motion_Sensor",
+    "ON/OFF_Switch",
+    "Dimmer_Switch",
+    "Camera"
+    // Sub-type can be nullable
+  ];
 
 class QRScannerWithController extends StatefulWidget {
-  const QRScannerWithController({super.key});
+  final dynamic deviceData;
+
+  const QRScannerWithController({super.key, required this.deviceData});
 
   @override
   State<QRScannerWithController> createState() =>
@@ -14,10 +28,11 @@ class QRScannerWithController extends StatefulWidget {
 }
 
 class _QRScannerWithControllerState extends State<QRScannerWithController> with WidgetsBindingObserver {
+  
   final MobileScannerController controller = MobileScannerController(
     autoStart: false,
-    torchEnabled: true,
-    useNewCameraSelector: true,
+    torchEnabled: false,
+    useNewCameraSelector: false,
   );
 
   Barcode? _barcode;
@@ -40,11 +55,52 @@ class _QRScannerWithControllerState extends State<QRScannerWithController> with 
   }
 
   void _handleBarcode(BarcodeCapture barcodes) {
-    if (mounted) {
-      setState(() {
-        _barcode = barcodes.barcodes.firstOrNull;
-      });
-    }
+    setState(() {
+      _barcode = barcodes.barcodes.firstOrNull;
+      String? serial = _barcode?.displayValue ?? "";
+
+      // Check if the barcode matches the specified format
+      if (serial != null && serial.contains('-')) {
+        List<String> parts = serial.split('-');
+        if (parts.length == 2 && types.contains(parts[0])) {
+          int? deviceID = int.tryParse(parts[1]);
+          if (deviceID != null) {
+            Map<String, dynamic> jsonObject = {
+              "ID": deviceID,
+            };
+
+            String jsonBody = jsonEncode(jsonObject);
+            //print(json);
+            api!.checkDeviceExists(jsonBody).then((value) {
+              if (value != "error") {
+                print("-------\n\n\n\n");
+                print(value);
+                print("\n\n\n\n-------");
+
+                  final Map<String, dynamic> data = jsonDecode(value);
+                  widget.deviceData["ID"] = data["ID"];
+                  widget.deviceData["SType"] = data["DeviceType"];
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>   WaitLink(deviceData: widget.deviceData),
+                    ),
+                  );
+
+
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Device not found!'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            });
+          }
+        }
+      }
+    });
   }
 
   @override
@@ -53,6 +109,7 @@ class _QRScannerWithControllerState extends State<QRScannerWithController> with 
     WidgetsBinding.instance.addObserver(this);
 
     _subscription = controller.barcodes.listen(_handleBarcode);
+    
 
     unawaited(controller.start());
   }
@@ -71,7 +128,7 @@ class _QRScannerWithControllerState extends State<QRScannerWithController> with 
       case AppLifecycleState.resumed:
         _subscription = controller.barcodes.listen(_handleBarcode);
 
-        unawaited(controller.start());
+        unawaited(controller.stop());
       case AppLifecycleState.inactive:
         unawaited(_subscription?.cancel());
         _subscription = null;
@@ -106,7 +163,7 @@ class _QRScannerWithControllerState extends State<QRScannerWithController> with 
                   StartStopMobileScannerButton(controller: controller),
                   Expanded(child: Center(child: _buildBarcode(_barcode))),
                   SwitchCameraButton(controller: controller),
-                  AnalyzeImageFromGalleryButton(controller: controller),
+                  AnalyzeImageFromGalleryButton(controller: controller, handleBarcode: _handleBarcode,),
                 ],
               ),
             ),
@@ -125,3 +182,4 @@ class _QRScannerWithControllerState extends State<QRScannerWithController> with 
     await controller.dispose();
   }
 }
+

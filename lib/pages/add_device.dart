@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:hcs_project/main.dart';
 import 'package:hcs_project/pages/add_devices_sub_pages/components/icons.dart';
 import 'package:hcs_project/pages/add_devices_sub_pages/QRcode_scanner_controller.dart';
 import 'package:hcs_project/pages/add_devices_sub_pages/explain_QRCode_scanner.dart';
@@ -31,29 +34,25 @@ class _NewDevicePageState extends State<NewDevicePage> {
     Colors.yellowAccent,
   ];
 
-  final List<String> subTypes = [
-    "Power Sensor",
-    "Temperature Sensor",
-    "motion Sensor",
-    "ON/OFF Switch",
-    "Dimmer Switch",
-    "Camera"
-    // Sub-type can be nullable
-  ];
+
+
+
 
 
    void navigateToNextPage() {
+
+
     final String name = deviceName.trim();
     print(name);
     print(selectedIcon);
     print(selectedColor);
-    if (name.isEmpty || selectedColor == null || 
+    if (name.isEmpty || selectedColor == null || selectedSubType == null || 
         ((selectedSubType == "Dimmer Switch" || selectedSubType == "ON/OFF Switch") && selectedIcon == null)) {
       // Show an error if any field is empty or not selected
       ScaffoldMessenger.of(context).showSnackBar(
         
         const SnackBar(
-          content: Text('Please fill all fields and make a selection!'),
+          content: Text('Please fill all fields and selections!'),
           behavior: SnackBarBehavior.floating, // Makes the SnackBar float
           margin: EdgeInsets.only(
           left: 16,
@@ -63,14 +62,46 @@ class _NewDevicePageState extends State<NewDevicePage> {
       ),);
       return;
     }
-
-    // Create a map with the collected data
-    final Map<String, dynamic> deviceData = {
+    
+        // Create a map with the collected data
+     Map<String, dynamic> deviceData = {
       'deviceName': name,
-      'color': selectedColor,
-      'icon': selectedIcon,
-      'roomId': widget.room['id'],
+      // ignore: deprecated_member_use
+      'color': selectedColor?.value, // Get the value of the color
+
+      'roomId': widget.room['ID'],
     };
+
+    if(selectedSubType == "Dimmer Switch" || selectedSubType == "ON/OFF Switch"){
+      deviceData['icon_code']= selectedIcon!.codePoint;
+      deviceData['icon_family']= selectedIcon!.fontFamily;
+    }
+
+    switch (selectedSubType) {
+      case "Dimmer Switch":
+        deviceData['type'] = 1;
+        break;
+      case "ON/OFF Switch":
+        deviceData['type'] = 0;
+
+        break;
+      case "Power Sensor":
+                deviceData['type'] = 0;
+
+        break;
+      case "Temperature Sensor":
+                deviceData['type'] = 1;
+
+        break;
+      case "Motion Sensor":
+                deviceData['type'] = 2;
+
+        break;
+      
+    };
+
+    String json = jsonEncode(deviceData);
+    print(json);
 
     Navigator.of(context).push(
       MaterialPageRoute(
