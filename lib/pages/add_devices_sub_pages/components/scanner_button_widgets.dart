@@ -36,12 +36,25 @@ class AnalyzeImageFromGalleryButton extends StatelessWidget {
 
         final SnackBar snackbar = barcodes != null
             ? const SnackBar(
-                content: Text('Barcode found!'),
+                content: Text('QR Code found!'),
+                duration: Duration(milliseconds: 1000), // Default is 4000ms (4 seconds)
                 backgroundColor: Colors.green,
+                behavior: SnackBarBehavior.floating, // Makes the SnackBar float
+                    margin: EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    bottom: 100, // Adjust this to leave space above the bottom navbar
+                  ),
               )
             : const SnackBar(
-                content: Text('No barcode found!'),
+                content: Text('No QR Code found!'),
                 backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating, // Makes the SnackBar float
+                    margin: EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    bottom: 100, // Adjust this to leave space above the bottom navbar
+                  ),
               );
         handleBarcode(barcodes!);
         ScaffoldMessenger.of(context).showSnackBar(snackbar);

@@ -267,6 +267,24 @@ Future<String> checkDeviceExists(String jsonBody) async {
     }
 
 }
+
+Future<String> sendLinkRequest(String jsonBody) async {
+    final url = Uri.parse("$baseUrl/secure/deviceLinkRequest");
+      final response = await http.post(url,
+      headers:{
+        'Authorization' : await getLocalToken() ?? "",
+      },
+      body: jsonBody,
+    );
+
+     if (response.statusCode == 200) {
+      return response.body;
+    } else { 
+           print('Failed to send data. Status code: ${response.statusCode}.\nError: ${response.body}');
+      return "error";
+    }
+
+}
   /*Future<void> fetchDevices() async {
     final BuildContext context = mainWidgetKey.currentContext!;
     final url = Uri.parse("$baseUrl/secure/getDevices");
@@ -350,7 +368,7 @@ final List<String> gridItemsIndexes2 = ["Kitchen2"];
 
   // Login Method
   Future<Map<String, dynamic>> checkToken() async {
-  final url = Uri.parse("$baseUrl/check-token");
+  final url = Uri.parse("$baseUrl/checkToken");
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json' , 'Authorization' : await getLocalToken() ?? ""},

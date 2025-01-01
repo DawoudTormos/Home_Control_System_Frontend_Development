@@ -67,6 +67,7 @@ class _QRScannerWithControllerState extends State<QRScannerWithController> with 
           if (deviceID != null) {
             Map<String, dynamic> jsonObject = {
               "ID": deviceID,
+              "roomID": widget.deviceData["roomId"],
             };
 
             String jsonBody = jsonEncode(jsonObject);
@@ -80,19 +81,35 @@ class _QRScannerWithControllerState extends State<QRScannerWithController> with 
                   final Map<String, dynamic> data = jsonDecode(value);
                   widget.deviceData["ID"] = data["ID"];
                   widget.deviceData["SType"] = data["DeviceType"];
-                Navigator.push(
+
+
+                Future.delayed(Duration(seconds: 2), () {
+                    Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>   WaitLink(deviceData: widget.deviceData),
                     ),
                   );
+                });
+
+
+
+                
 
 
               } else {
+
+                
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Device not found!'),
+                    content: Text('QR code not valid!'),
                     backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating, // Makes the SnackBar float
+                    margin: EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    bottom: 100, // Adjust this to leave space above the bottom navbar
+                  ),
                   ),
                 );
               }
