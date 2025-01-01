@@ -126,6 +126,9 @@ return editMode;
         itemBuilder: (context, index) {
           final item = widget.gridItems![widget.gridItemsIndexes![index]["Name"]]!;
 
+          if(item.length == 0){
+            return Container();
+          }
           Widget gridItem =
               EditableGrid(title: widget.gridItemsIndexes![index]["Name"], data: item);
 
@@ -182,12 +185,12 @@ return editMode;
           physics: const NeverScrollableScrollPhysics(),
           itemCount: widget.gridItems!.length,
           itemBuilder: (context, index) {
-            print(widget.gridItems!.length);
-                        print("\n");
-            print(widget.gridItemsIndexes!.length);
-            print("\n");            print(index);
-            print("\n");
+
             final item = widget.gridItems![widget.gridItemsIndexes![index]["Name"]]!;
+            
+            if(item.length == 0){
+            return Container();
+              }
 
             Widget gridItem = EditableGrid(
                 title: widget.gridItemsIndexes![index]["Name"], data: item);

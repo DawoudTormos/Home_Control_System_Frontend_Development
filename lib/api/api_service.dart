@@ -48,10 +48,19 @@ Future<void> fetchAndProcessDevices() async {
       // Parse the list of devices
       final List<Map<String, dynamic>> deviceList = (devices as List<dynamic>).map((device) {
         // Convert IconCode and IconFamily to IconData
-        final iconData = IconData(
+
+        var iconData ;
+        if (device["SType"] == "switch") {
+          iconData = IconData(
           device['IconCode'],
           fontFamily: device['IconFamily'],
         );
+        } else if (device["SType"] == "sensor") {
+          iconData = Icons.sensors;
+        } else if (device["SType"] == "camera") {
+          iconData = Icons.camera_outdoor;
+        }
+        
         if(device["Type"] == 1){
           //print(device["Value"]);
           device["Value"] = device["Value"].toDouble() / 100 ;
@@ -103,7 +112,7 @@ Future<void> fetchAndProcessDevices() async {
       }
 
 
-            // Sort devices by index
+      // Sort devices by index
       deviceList.sort((a, b) => a["Index"].compareTo(b["Index"]));
       // Add processed devices to gridItems
       gridItems[room] = deviceList;
