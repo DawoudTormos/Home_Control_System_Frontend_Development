@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 class ApiService {
   final String baseUrl = "http://10.0.2.2:8080";
   final _storage = const FlutterSecureStorage();
+  String username = "";
   
   final dynamic mainWidgetKey;
 
@@ -123,6 +124,7 @@ Future<void> fetchAndProcessDevices() async {
       final BuildContext context = mainWidgetKey.currentContext!;
       Provider.of<LoginState>(context, listen: false).login();
       Provider.of<LoginState>(context, listen: false).setDataLoaded(true);
+      Provider.of<DataUpdateState>(context, listen: false).alertDataUpdated();
 
   } else {
     throw Exception('Failed to fetch devices');
@@ -193,7 +195,6 @@ Future<void> fetchAndProcessRooms() async {
     
       final BuildContext context = mainWidgetKey.currentContext!;
       Provider.of<DataUpdateState>(context, listen: false).alertDataUpdated();
-      
 
   } else {
     throw Exception('Failed to fetch devices');
@@ -294,75 +295,31 @@ Future<String> sendLinkRequest(String jsonBody) async {
     }
 
 }
-  /*Future<void> fetchDevices() async {
-    final BuildContext context = mainWidgetKey.currentContext!;
-    final url = Uri.parse("$baseUrl/secure/getDevices");
-    final response = await http.get(url,
+
+
+Future<String> checkDeviceLinkRequestState(String jsonBody) async {
+    final url = Uri.parse("$baseUrl/secure/deviceLinkRequestState");
+      final response = await http.post(url,
       headers:{
         'Authorization' : await getLocalToken() ?? "",
-      }
+      },
+      body: jsonBody,
     );
 
-    if (response.statusCode == 200) {
-      // Parse the response JSON
-      Map<String, dynamic> data = json.decode(response.body);
-      print(data);
-
-      // Convert to the desired structure
-      Map<String, List<Map<String, dynamic>>> gridItems = {};
-
-      data.forEach((room, devices) {
-        // Sort the devices by 'Index' in ascending order
-        devices.sort((a, b) => (a['Index'] as int).compareTo(b['Index'] as int));
-
-        // Add sorted devices to the gridItems map
-        gridItems[room] = List<Map<String, dynamic>>.from(devices);
-      });
-
-      this.gridItems =  gridItems;
-      
-      Provider.of<LoginState>(context, listen: false).login();
-
-    } else {
-      throw Exception('Failed to load devices');
+     if (response.statusCode == 200) {
+      return response.body;
+    } else { 
+           print('Failed to send data. Status code: ${response.statusCode}.\nError: ${response.body}');
+      return "error";
     }
-  }*/
 
+}
+  
    
  Map<String, List<Map<String, dynamic>>> gridItems = {};
 
- Map<String, List<Map<String, dynamic>>> gridItems2 = {
-  "Kitchen2": [
-    {
-      "name": "Lamp 1",
-      "color": Colors.deepOrange,
-      "icon": Icons.lightbulb,
-      "value": true
-    },
-    {
-      "name": "Spotlight 1",
-      "color": Colors.orange,
-      "icon": Icons.light,
-      "value": 0.86
-    },
-    {
-      "name": "AC 2",
-      "color": Colors.purple,
-      "icon": Icons.ac_unit,
-      "value": true
-    },
-    {
-      "name": "Door Lock",
-      "color": Colors.teal,
-      "icon": Icons.lock_outlined,
-      "value": true
-    },
-  ],
-  
-};
 
  List<Map<String, dynamic>> gridItemsIndexes = [];
-final List<String> gridItemsIndexes2 = ["Kitchen2"];
 
 
   // Store token securely
@@ -393,6 +350,7 @@ final List<String> gridItemsIndexes2 = ["Kitchen2"];
         Provider.of<LoginState>(context, listen: false).setTokenCheck(true);
         Provider.of<LoginState>(context, listen: false).login();
         print(data);
+        username = data["username"];
         waitToFetchAndProcessDevices();
         return {"success": true};
       } else {
@@ -423,7 +381,7 @@ final List<String> gridItemsIndexes2 = ["Kitchen2"];
         await saveLocalToken(data["token"]);
         final BuildContext context = mainWidgetKey.currentContext!;
         Provider.of<LoginState>(context, listen: false).login();
-        waitToFetchAndProcessDevices();
+        checkToken();
         return {"success": true};
       } else {
         return {"success": false, "error": data["error"]};

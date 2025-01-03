@@ -57,7 +57,7 @@ return editMode;
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Hi admin!",
+                "Hi ${api!.username}!",
                 style: TextStyle(
                     fontSize: screenWidth < 430 ? 20 : 24,
                     fontWeight: FontWeight.bold),
