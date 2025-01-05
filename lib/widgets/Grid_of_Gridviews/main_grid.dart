@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hcs_project/main.dart';
+import 'package:hcs_project/pages/devices_manager.dart';
 import 'package:hcs_project/stateManagment/login_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ return editMode;
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Hi ${api!.username}!",
+                "Hi ${api!.username.capitalize()}!",
                 style: TextStyle(
                     fontSize: screenWidth < 430 ? 20 : 24,
                     fontWeight: FontWeight.bold),

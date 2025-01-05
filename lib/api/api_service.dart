@@ -11,6 +11,7 @@ class ApiService {
   final String baseUrl = "http://10.0.2.2:8080";
   final _storage = const FlutterSecureStorage();
   String username = "";
+  String email = "";
   
   final dynamic mainWidgetKey;
 
@@ -351,6 +352,7 @@ Future<String> checkDeviceLinkRequestState(String jsonBody) async {
         Provider.of<LoginState>(context, listen: false).login();
         print(data);
         username = data["username"];
+        email = data["email"];
         waitToFetchAndProcessDevices();
         return {"success": true};
       } else {
@@ -389,6 +391,16 @@ Future<String> checkDeviceLinkRequestState(String jsonBody) async {
     } else {
       return {"success": false, "error": "Unexpected server error"};
     }
+  }
+
+
+  Future<void> logout( ) async {
+    username = "";
+    email = "";
+    await _storage.delete(key: 'jwt_token');
+    final BuildContext context = mainWidgetKey.currentContext!;
+    Provider.of<LoginState>(context, listen: false).logout();
+
   }
 
   // Sign Up Method

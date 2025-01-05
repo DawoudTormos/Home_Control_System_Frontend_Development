@@ -21,14 +21,17 @@ class LoginState extends ChangeNotifier {
     _isTokenChecked = x;
     notifyListeners();
   }
+
   void login() {
     _isLoggedIn = true;
     notifyListeners();
   }
 
   void logout() {
-    _isLoggedIn = false;
+   _isLoggedIn = false;
+   _isDataLoaded= false;
     notifyListeners();
   }
+  
 }
 

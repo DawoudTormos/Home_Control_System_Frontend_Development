@@ -2,6 +2,7 @@ import 'package:hcs_project/main.dart';
 import 'package:hcs_project/pages/add_device.dart';
 import 'package:hcs_project/pages/ai_assistant.dart';
 import 'package:hcs_project/pages/dashboard.dart';
+import 'package:hcs_project/pages/profile_page.dart';
 import 'package:hcs_project/pages/rooms_manager.dart';
 import 'package:hcs_project/stateManagment/login_state.dart';
 import 'package:flutter/foundation.dart';
@@ -34,8 +35,8 @@ class NavBar extends StatelessWidget {
         inactiveColorSecondary: Colors.blue,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.dashboard),
-        title: "Dashboard",
+        icon: const Icon(Icons.memory ),
+        title: "Assistant",
         activeColorPrimary: Colors.white,
         activeColorSecondary: Colors.black,
         inactiveColorPrimary: Colors.grey[800],
@@ -50,8 +51,8 @@ class NavBar extends StatelessWidget {
         inactiveColorSecondary: Colors.blue,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.logout),
-        title: "Logout",
+        icon: const Icon(Icons.person),
+        title: "Profile",
         activeColorPrimary: Colors.white,
         activeColorSecondary: Colors.black,
         inactiveColorPrimary: Colors.grey[800],
@@ -70,7 +71,7 @@ class NavBar extends StatelessWidget {
     Dashboard(gridItems: api!.gridItems, gridItemsIndexes: api!.gridItemsIndexes), // Home
     const AIAssistantPage(), // Dashboard
      DeviceManager(), // Device Manager 
-    Container()
+    ProfilePage()
   ];
 
   }
@@ -101,6 +102,8 @@ class NavBar extends StatelessWidget {
           rerenderMainMobile();
             break;
           case 3:
+          currentPage = "profile";
+          rerenderMainMobile();
             break;
         }
       },
