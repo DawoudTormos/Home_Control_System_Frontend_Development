@@ -38,7 +38,7 @@ class MainGridState extends State<MainGrid> {
   }
 
   void _startInfiniteLoop() {
-    Timer.periodic(const Duration(milliseconds: 1000), (timer) async {
+    Timer.periodic(const Duration(milliseconds: 2500), (timer) async {
         await api!.fetchAndProcessDevices();
         setState(() {
           widget.gridItemsIndexes = api!.gridItemsIndexes;
