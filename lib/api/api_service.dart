@@ -8,7 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 class ApiService {
-  final String baseUrl = "http://10.0.2.2:8080";
+  final String baseUrl = "http://192.168.77.100:8080";
   final _storage = const FlutterSecureStorage();
   String username = "";
   String email = "";
@@ -121,7 +121,7 @@ Future<void> fetchAndProcessDevices() async {
     });
 
       this.gridItems =  gridItems;
-      print(gridItems);
+      //print(gridItems);
       final BuildContext context = mainWidgetKey.currentContext!;
       Provider.of<LoginState>(context, listen: false).login();
       Provider.of<LoginState>(context, listen: false).setDataLoaded(true);
@@ -189,7 +189,7 @@ Future<void> fetchAndProcessRooms() async {
 
       // Sort rooms by index
       rooms.sort((a, b) => a["Index"].compareTo(b["Index"]));
-      print(rooms);
+      //print(rooms);
 
       // Add processed devices to gridItems
       this.gridItemsIndexes = rooms;
@@ -350,7 +350,7 @@ Future<String> checkDeviceLinkRequestState(String jsonBody) async {
         final BuildContext context = mainWidgetKey.currentContext!;
         Provider.of<LoginState>(context, listen: false).setTokenCheck(true);
         Provider.of<LoginState>(context, listen: false).login();
-        print(data);
+        //print(data);
         username = data["username"];
         email = data["email"];
         waitToFetchAndProcessDevices();

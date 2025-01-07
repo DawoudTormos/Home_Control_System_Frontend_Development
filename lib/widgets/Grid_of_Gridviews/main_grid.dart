@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:hcs_project/main.dart';
@@ -12,11 +13,11 @@ import 'package:provider/provider.dart';
 
 
 class MainGrid extends StatefulWidget {
-  final Map<String, List<Map<String, dynamic>>>? gridItems;
-  final List<Map<String, dynamic>>? gridItemsIndexes;
+  Map<String, List<Map<String, dynamic>>>? gridItems;
+  List<Map<String, dynamic>>? gridItemsIndexes;
 
 
-  const MainGrid(
+   MainGrid(
       {super.key, required this.gridItems, required this.gridItemsIndexes});
 
   @override
@@ -27,6 +28,25 @@ class MainGridState extends State<MainGrid> {
   final GlobalKey _gridKey = GlobalKey();
 
   bool editMode = false;
+
+    
+ @override
+  void initState() {
+    super.initState();
+    // Start the infinite loop
+    _startInfiniteLoop();
+  }
+
+  void _startInfiniteLoop() {
+    Timer.periodic(const Duration(milliseconds: 1000), (timer) async {
+        await api!.fetchAndProcessDevices();
+        setState(() {
+          widget.gridItemsIndexes = api!.gridItemsIndexes;
+          widget.gridItems = api!.gridItems;
+        });
+    });
+  }
+  
 
   void updateEditMode() {
     setState(() {

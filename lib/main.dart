@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
     loginState = Provider.of<LoginState>(context);
     //api!.checkToken();
     
-  print("building at main");
+  //print("building at main");
    return  MaterialApp(
     
     home: isTokenChecked(loginState!.isTokenChecked, loginState!.isLoggedIn, loginState!.isDataLoaded),

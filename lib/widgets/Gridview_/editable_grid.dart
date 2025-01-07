@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:hcs_project/main.dart';
 import 'package:flutter/material.dart';
+import 'package:hcs_project/widgets/Gridview_/grid_item_sensor.dart';
 import 'grid_item_switch.dart';
 import 'grid_item_slider.dart';
 
@@ -76,9 +77,15 @@ class _EditableGridState extends State<EditableGrid> {
               itemBuilder: (context, index) {
                 final item = widget.data[index];
 
-                Widget gridItem = item['Type'] == 0
+                Widget gridItem = Container();
+                if (item['SType'] == "sensor") {
+                   gridItem = GridItemSensor(item: item);
+                }else if(item['SType'] == "switch"){
+                   gridItem = item['Type'] == 0
                     ? GridItemSwitch(item: item)
                     : GridItemSlider(item: item);
+                }
+
 
                 if (editMode) {
                   return Draggable<int>(
