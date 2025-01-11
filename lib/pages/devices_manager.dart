@@ -36,7 +36,10 @@ class DevicesRoom extends StatelessWidget {
               children: [
                 Text(
                   room['Name'],
-                  style: TextStyle(fontSize: screenWidth < 430 ? 20 : 24 ,fontWeight: FontWeight.bold, color: Colors.black), // White text
+                  style: TextStyle(
+                      fontSize: screenWidth < 430 ? 20 : 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black), // White text
                 ),
               ],
             ),
@@ -47,26 +50,29 @@ class DevicesRoom extends StatelessWidget {
                 itemCount: groupedDevices.keys.length,
                 itemBuilder: (context, index) {
                   String sType = groupedDevices.keys.elementAt(index);
-                  List<Map<String, dynamic>> deviceList = groupedDevices[sType]!;
+                  List<Map<String, dynamic>> deviceList =
+                      groupedDevices[sType]!;
 
                   return DeviceTable(sType: sType, devices: deviceList);
                 },
               ),
             ),
-                      ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, // White background
-                        foregroundColor: Colors.black, // Black text
-                        side: const BorderSide(color: Colors.black, width: 2), // Black border
-                      ),
-                      child: const Text("Add Device"), 
-                      onPressed: () {
-                        // Navigate to add device page (to be implemented)
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => NewDevicePage(room: room), // Replace with your actual page
-                        ));
-                      },
-                ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white, // White background
+                foregroundColor: Colors.black, // Black text
+                side: const BorderSide(
+                    color: Colors.black, width: 2), // Black border
+              ),
+              child: const Text("Add Device"),
+              onPressed: () {
+                // Navigate to add device page (to be implemented)
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => NewDevicePage(
+                      room: room), // Replace with your actual page
+                ));
+              },
+            ),
           ],
         ),
       ),
@@ -77,16 +83,16 @@ class DevicesRoom extends StatelessWidget {
 class DeviceTable extends StatelessWidget {
   final String sType;
   final List<Map<String, dynamic>> devices;
-  final List<String> sensorTypes = ["Power", "Temperature","Motion"];
+  final List<String> sensorTypes = ["Power", "Temperature", "Motion"];
 
-   DeviceTable({super.key, required this.sType, required this.devices});
+  DeviceTable({super.key, required this.sType, required this.devices});
 
   @override
   Widget build(BuildContext context) {
-    final tableNames={
-      "switch":"Switches",
-      "camera":"Camera",
-      "sensor":"Sensors"
+    final tableNames = {
+      "switch": "Switches",
+      "camera": "Camera",
+      "sensor": "Sensors"
     };
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -96,7 +102,9 @@ class DeviceTable extends StatelessWidget {
       child: Card(
         margin: const EdgeInsets.symmetric(vertical: 10),
         color: Colors.white, // White background for the table
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero,side: BorderSide(color: Colors.grey)), // No border radius
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+            side: BorderSide(color: Colors.grey)), // No border radius
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -104,37 +112,61 @@ class DeviceTable extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  tableNames[sType.toLowerCase()]!, // Capitalize the SType for better presentation
+                  tableNames[sType
+                      .toLowerCase()]!, // Capitalize the SType for better presentation
                   style: TextStyle(
                       fontSize: screenWidth < 430 ? 20 : 24,
                       fontWeight: FontWeight.bold), // Black text for title
                 ),
               ),
               const SizedBox(height: 10),
-              Expanded( // Make the DataTable take available space
-                child: SingleChildScrollView( // Make table scrollable
+              Expanded(
+                // Make the DataTable take available space
+                child: SingleChildScrollView(
+                  // Make table scrollable
                   child: DataTable(
                     //border: TableBorder(top: BorderSide(),bottom: BorderSide(),left: BorderSide(),right: BorderSide()),
 
                     columns: const [
-                      DataColumn(label: Text('Icon', style: TextStyle(color: Colors.black))), // Black text for headers
-                      DataColumn(label: Text('Name', style: TextStyle(color: Colors.black))),
-                      DataColumn(label: Text('Type', style: TextStyle(color: Colors.black))),
-                      DataColumn(label: Text('Color', style: TextStyle(color: Colors.black))),
+                      DataColumn(
+                          label: Text('Icon',
+                              style: TextStyle(
+                                  color:
+                                      Colors.black))), // Black text for headers
+                      DataColumn(
+                          label: Text('Name',
+                              style: TextStyle(color: Colors.black))),
+                      DataColumn(
+                          label: Text('Type',
+                              style: TextStyle(color: Colors.black))),
+                      DataColumn(
+                          label: Text('Color',
+                              style: TextStyle(color: Colors.black))),
                     ],
                     rows: devices.map((device) {
                       var type = "";
-                      if(device['SType'] == "switch"){
-                        type = (device['Type']==0 ? "ON/OFF" : "Dimmer") + "\n Switch";
-                      }else if(device['SType'] == "camera"){
+                      if (device['SType'] == "switch") {
+                        type = (device['Type'] == 0 ? "ON/OFF" : "Dimmer") +
+                            "\n Switch";
+                      } else if (device['SType'] == "camera") {
                         type = "Camera";
-                      }else if(device['SType'] == "sensor"){
+                      } else if (device['SType'] == "sensor") {
                         type = sensorTypes[device['Type']] + "\n Sensor";
                       }
                       return DataRow(cells: [
-                        DataCell(Icon(device['Icon'], color: Colors.black, size: 23,)), // Black icon
-                        DataCell(Text(device['Name'], style: TextStyle(color: Colors.black,fontSize: screenWidth < 430 ? 13 : 17))), 
-                        DataCell(Text(type, style: TextStyle(color: Colors.black,fontSize: screenWidth < 430 ? 12 : 16))),
+                        DataCell(Icon(
+                          device['Icon'],
+                          color: Colors.black,
+                          size: 23,
+                        )), // Black icon
+                        DataCell(Text(device['Name'],
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: screenWidth < 430 ? 13 : 17))),
+                        DataCell(Text(type,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: screenWidth < 430 ? 12 : 16))),
                         DataCell(Container(
                           width: 15,
                           height: 15,
@@ -152,11 +184,6 @@ class DeviceTable extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
 
 // Extension to capitalize the first letter of a string
 extension StringCasingExtension on String {

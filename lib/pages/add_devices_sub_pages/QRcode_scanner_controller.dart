@@ -8,14 +8,14 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'dart:convert';
 
 final List<String> types = [
-    "Power_Sensor",
-    "Temperature_Sensor",
-    "Motion_Sensor",
-    "ON/OFF_Switch",
-    "Dimmer_Switch",
-    "Camera"
-    // Sub-type can be nullable
-  ];
+  "Power_Sensor",
+  "Temperature_Sensor",
+  "Motion_Sensor",
+  "ON/OFF_Switch",
+  "Dimmer_Switch",
+  "Camera"
+  // Sub-type can be nullable
+];
 
 class QRScannerWithController extends StatefulWidget {
   final dynamic deviceData;
@@ -27,8 +27,8 @@ class QRScannerWithController extends StatefulWidget {
       _QRScannerWithControllerState();
 }
 
-class _QRScannerWithControllerState extends State<QRScannerWithController> with WidgetsBindingObserver {
-  
+class _QRScannerWithControllerState extends State<QRScannerWithController>
+    with WidgetsBindingObserver {
   final MobileScannerController controller = MobileScannerController(
     autoStart: false,
     torchEnabled: false,
@@ -78,38 +78,32 @@ class _QRScannerWithControllerState extends State<QRScannerWithController> with 
                 print(value);
                 print("\n\n\n\n-------");
 
-                  final Map<String, dynamic> data = jsonDecode(value);
-                  widget.deviceData["ID"] = data["ID"];
-                  widget.deviceData["SType"] = data["DeviceType"];
-
+                final Map<String, dynamic> data = jsonDecode(value);
+                widget.deviceData["ID"] = data["ID"];
+                widget.deviceData["SType"] = data["DeviceType"];
 
                 Future.delayed(Duration(seconds: 2), () {
-                    Navigator.push(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>   WaitLink(deviceData: widget.deviceData),
+                      builder: (context) =>
+                          WaitLink(deviceData: widget.deviceData),
                     ),
                   );
                 });
-
-
-
-                
-
-
               } else {
-
-                
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('QR code not valid!'),
                     backgroundColor: Colors.red,
-                    behavior: SnackBarBehavior.floating, // Makes the SnackBar float
+                    behavior:
+                        SnackBarBehavior.floating, // Makes the SnackBar float
                     margin: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: 100, // Adjust this to leave space above the bottom navbar
-                  ),
+                      left: 16,
+                      right: 16,
+                      bottom:
+                          100, // Adjust this to leave space above the bottom navbar
+                    ),
                   ),
                 );
               }
@@ -126,7 +120,6 @@ class _QRScannerWithControllerState extends State<QRScannerWithController> with 
     WidgetsBinding.instance.addObserver(this);
 
     _subscription = controller.barcodes.listen(_handleBarcode);
-    
 
     unawaited(controller.start());
   }
@@ -180,7 +173,10 @@ class _QRScannerWithControllerState extends State<QRScannerWithController> with 
                   StartStopMobileScannerButton(controller: controller),
                   Expanded(child: Center(child: _buildBarcode(_barcode))),
                   SwitchCameraButton(controller: controller),
-                  AnalyzeImageFromGalleryButton(controller: controller, handleBarcode: _handleBarcode,),
+                  AnalyzeImageFromGalleryButton(
+                    controller: controller,
+                    handleBarcode: _handleBarcode,
+                  ),
                 ],
               ),
             ),
@@ -199,4 +195,3 @@ class _QRScannerWithControllerState extends State<QRScannerWithController> with 
     await controller.dispose();
   }
 }
-

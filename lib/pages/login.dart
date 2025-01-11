@@ -8,15 +8,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-    final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _usernameController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
 
-    String? _message;
-    Color? _messageColor; 
- // To store error messages
+  String? _message;
+  Color? _messageColor;
+  // To store error messages
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +33,12 @@ class _LoginPageState extends State<LoginPage> {
           return Center(
             child: SingleChildScrollView(
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: isWideScreen ? 400 : double.infinity),
+                constraints: BoxConstraints(
+                    maxWidth: isWideScreen ? 400 : double.infinity),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Form(
-                    key:_formKey ,
+                    key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -50,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                         TextFormField(
+                        TextFormField(
                           controller: _usernameController,
                           decoration: const InputDecoration(
                             labelText: 'Username',
@@ -61,16 +62,16 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Username is required';
-                    }
-                    return null;
-                                    },
+                            if (value == null || value.isEmpty) {
+                              return 'Username is required';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 16),
-                         TextFormField(
+                        TextFormField(
                           obscureText: true,
-                          controller:_passwordController ,
+                          controller: _passwordController,
                           decoration: const InputDecoration(
                             labelText: 'Password',
                             labelStyle: TextStyle(color: Colors.black),
@@ -80,21 +81,24 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Password is required';
-                    }
-                    return null;
-                                    },
+                            if (value == null || value.isEmpty) {
+                              return 'Password is required';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 24),
                         if (_message != null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0 , left: 8.0),
-                  child: Text(
-                    _message!,
-                    style: TextStyle(color: _messageColor, fontSize: 15),
-                  ),
-                ),      const SizedBox(height: 24),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: 8.0, left: 8.0),
+                            child: Text(
+                              _message!,
+                              style:
+                                  TextStyle(color: _messageColor, fontSize: 15),
+                            ),
+                          ),
+                        const SizedBox(height: 24),
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
@@ -104,24 +108,23 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                              var result =  api?.login(_usernameController.text,  _passwordController.text);
+                                var result = api?.login(
+                                    _usernameController.text,
+                                    _passwordController.text);
 
-                              result?.then((value){
-                              if (value["success"]){
-                                setState(() {
-                                  _message = "Success";
-                                  _messageColor = Colors.green;
-
+                                result?.then((value) {
+                                  if (value["success"]) {
+                                    setState(() {
+                                      _message = "Success";
+                                      _messageColor = Colors.green;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      _message = value["error"];
+                                      _messageColor = Colors.red;
+                                    });
+                                  }
                                 });
-                              }else{
-                                setState(() {
-                                  _message = value["error"];
-                                   _messageColor = Colors.red;
-
-                                });
-                              }
-                              });
-
                               }
                             },
                             child: const Text('Login'),
@@ -131,15 +134,18 @@ class _LoginPageState extends State<LoginPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text('Don\'t have an account?', style: TextStyle(color: Colors.black)),
+                            const Text('Don\'t have an account?',
+                                style: TextStyle(color: Colors.black)),
                             TextButton(
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => SignUpPage()),
+                                  MaterialPageRoute(
+                                      builder: (context) => SignUpPage()),
                                 );
                               },
-                              child: const Text('Sign Up', style: TextStyle(color: Colors.black)),
+                              child: const Text('Sign Up',
+                                  style: TextStyle(color: Colors.black)),
                             ),
                           ],
                         ),

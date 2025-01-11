@@ -6,10 +6,9 @@ import 'package:hcs_project/pages/add_devices_sub_pages/QRcode_scanner_controlle
 import 'package:hcs_project/pages/add_devices_sub_pages/explain_QRCode_scanner.dart';
 import 'package:flutter/material.dart';
 
-
 class NewDevicePage extends StatefulWidget {
-  Map<String,dynamic> room;
-   NewDevicePage({super.key, required this.room});
+  Map<String, dynamic> room;
+  NewDevicePage({super.key, required this.room});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -34,37 +33,34 @@ class _NewDevicePageState extends State<NewDevicePage> {
     Colors.yellowAccent,
   ];
 
-
-
-
-
-
-   void navigateToNextPage() {
-
-
+  void navigateToNextPage() {
     final String name = deviceName.trim();
     print(name);
     print(selectedIcon);
     print(selectedColor);
-    if (name.isEmpty || selectedColor == null || selectedSubType == null || 
-        ((selectedSubType == "Dimmer Switch" || selectedSubType == "ON/OFF Switch") && selectedIcon == null)) {
+    if (name.isEmpty ||
+        selectedColor == null ||
+        selectedSubType == null ||
+        ((selectedSubType == "Dimmer Switch" ||
+                selectedSubType == "ON/OFF Switch") &&
+            selectedIcon == null)) {
       // Show an error if any field is empty or not selected
       ScaffoldMessenger.of(context).showSnackBar(
-        
         const SnackBar(
           content: Text('Please fill all fields and selections!'),
           behavior: SnackBarBehavior.floating, // Makes the SnackBar float
           margin: EdgeInsets.only(
-          left: 16,
-          right: 16,
-          bottom: 100, // Adjust this to leave space above the bottom navbar
+            left: 16,
+            right: 16,
+            bottom: 100, // Adjust this to leave space above the bottom navbar
+          ),
         ),
-      ),);
+      );
       return;
     }
-    
-        // Create a map with the collected data
-     Map<String, dynamic> deviceData = {
+
+    // Create a map with the collected data
+    Map<String, dynamic> deviceData = {
       'deviceName': name,
       // ignore: deprecated_member_use
       'color': selectedColor?.value, // Get the value of the color
@@ -72,9 +68,10 @@ class _NewDevicePageState extends State<NewDevicePage> {
       'roomId': widget.room['ID'],
     };
 
-    if(selectedSubType == "Dimmer Switch" || selectedSubType == "ON/OFF Switch"){
-      deviceData['icon_code']= selectedIcon!.codePoint;
-      deviceData['icon_family']= selectedIcon!.fontFamily;
+    if (selectedSubType == "Dimmer Switch" ||
+        selectedSubType == "ON/OFF Switch") {
+      deviceData['icon_code'] = selectedIcon!.codePoint;
+      deviceData['icon_family'] = selectedIcon!.fontFamily;
     }
 
     switch (selectedSubType) {
@@ -86,19 +83,19 @@ class _NewDevicePageState extends State<NewDevicePage> {
 
         break;
       case "Power Sensor":
-                deviceData['type'] = 0;
+        deviceData['type'] = 0;
 
         break;
       case "Temperature Sensor":
-                deviceData['type'] = 1;
+        deviceData['type'] = 1;
 
         break;
       case "Motion Sensor":
-                deviceData['type'] = 2;
+        deviceData['type'] = 2;
 
         break;
-      
-    };
+    }
+    ;
 
     String json = jsonEncode(deviceData);
     print(json);
@@ -110,7 +107,6 @@ class _NewDevicePageState extends State<NewDevicePage> {
     );
   }
 
-
   Color? selectedColor;
   IconData? selectedIcon;
   String? selectedSubType;
@@ -120,24 +116,28 @@ class _NewDevicePageState extends State<NewDevicePage> {
 
   @override
   Widget build(BuildContext context) {
-
     //final double screenWidth = MediaQuery.of(context).size.height;
-
 
     if (icons.length != iconsNames.length) {
       //print(icons.length);
       //print(iconsNames.length);
-      throw Exception('This is an error message beacuase icons.length != iconsNames.length');
+      throw Exception(
+          'This is an error message beacuase icons.length != iconsNames.length');
     }
     int index = -1, resultCount = 0;
     final filteredIcons = icons.where((icon) {
       index++;
-       if(iconsNames[index].toString().toLowerCase().contains(iconSearchQuery.toLowerCase())) resultCount ++ ;
+      if (iconsNames[index]
+          .toString()
+          .toLowerCase()
+          .contains(iconSearchQuery.toLowerCase())) resultCount++;
       //print(resultCount);
-      return (iconSearchQuery.isEmpty  
-            || iconsNames[index].toString().toLowerCase().contains(iconSearchQuery.toLowerCase())
-            && resultCount< 100
-          );
+      return (iconSearchQuery.isEmpty ||
+          iconsNames[index]
+                  .toString()
+                  .toLowerCase()
+                  .contains(iconSearchQuery.toLowerCase()) &&
+              resultCount < 100);
     }).toList();
 
     //print(filteredIcons.length);
@@ -145,18 +145,21 @@ class _NewDevicePageState extends State<NewDevicePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0), // Increased vertical padding
+        padding: const EdgeInsets.symmetric(
+            vertical: 24.0, horizontal: 16.0), // Increased vertical padding
         child: Center(
           child: SingleChildScrollView(
-
             child: SizedBox(
-              height: (selectedSubType == "Dimmer Switch" || selectedSubType == "ON/OFF Switch") ? 1000 : 600,
+              height: (selectedSubType == "Dimmer Switch" ||
+                      selectedSubType == "ON/OFF Switch")
+                  ? 1000
+                  : 600,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   // Page title as text
-                  
+
                   const Text(
                     "Enter new Device Details",
                     style: TextStyle(
@@ -182,7 +185,7 @@ class _NewDevicePageState extends State<NewDevicePage> {
                     onChanged: (value) => setState(() => deviceName = value),
                   ),
                   const SizedBox(height: 20),
-              
+
                   // Color Picker
                   const Text("Choose a Color:"),
                   Wrap(
@@ -209,7 +212,7 @@ class _NewDevicePageState extends State<NewDevicePage> {
                     }).toList(),
                   ),
                   const SizedBox(height: 20),
-              
+
                   // Sub-type Dropdown
                   const Text("Choose Device Type:"),
                   DropdownButton<String?>(
@@ -223,12 +226,14 @@ class _NewDevicePageState extends State<NewDevicePage> {
                         child: Text(subType),
                       );
                     }).toList(),
-                    onChanged: (value) => setState(() => selectedSubType = value),
+                    onChanged: (value) =>
+                        setState(() => selectedSubType = value),
                   ),
                   const SizedBox(height: 20),
 
                   // Icon Picker with Search (conditionally displayed)
-                  if (selectedSubType == "Dimmer Switch" || selectedSubType == "ON/OFF Switch") ...[
+                  if (selectedSubType == "Dimmer Switch" ||
+                      selectedSubType == "ON/OFF Switch") ...[
                     const Text("Choose an Icon:"),
                     TextField(
                       cursorColor: Colors.black,
@@ -253,7 +258,8 @@ class _NewDevicePageState extends State<NewDevicePage> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: GridView.builder(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 5,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
@@ -282,13 +288,12 @@ class _NewDevicePageState extends State<NewDevicePage> {
                   SizedBox(
                     width: 130,
                     child: ElevatedButton(
-                    
-                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white, // White background
-                          foregroundColor: Colors.black, // Black text
-                          side: const BorderSide(color: Colors.black, width: 2), // Black border
-                      
-                        ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // White background
+                        foregroundColor: Colors.black, // Black text
+                        side: const BorderSide(
+                            color: Colors.black, width: 2), // Black border
+                      ),
                       onPressed: () {
                         navigateToNextPage();
                       },

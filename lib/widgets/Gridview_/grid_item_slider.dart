@@ -18,8 +18,7 @@ class _GridItemSlider extends State<GridItemSlider> {
   _GridItemSlider();
   double prevSliderValue = 0;
 
-
- @override
+  @override
   void initState() {
     super.initState();
     prevSliderValue = widget.item["Value"];
@@ -29,21 +28,20 @@ class _GridItemSlider extends State<GridItemSlider> {
 
   void _startInfiniteLoop() {
     Timer.periodic(const Duration(milliseconds: 600), (timer) {
+      if (widget.item["Value"] != prevSliderValue) {
+        prevSliderValue = widget.item["Value"];
+        Map<String, dynamic> requestBody = {};
 
-      if(widget.item["Value"] != prevSliderValue){
-        prevSliderValue = widget.item["Value"] ;
-       Map<String,dynamic> requestBody = {};
+        requestBody["ID"] = widget.item["ID"];
+        requestBody["Value"] = (widget.item["Value"] * 100).toInt();
 
-       requestBody["ID"] = widget.item["ID"];
-       requestBody["Value"] = (widget.item["Value"]*100).toInt();
-
-       final jsonBody = jsonEncode(requestBody);
-       api?.setSwitchValue(jsonBody);     
+        final jsonBody = jsonEncode(requestBody);
+        api?.setSwitchValue(jsonBody);
       }
       /*setState(() {      });*/
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;

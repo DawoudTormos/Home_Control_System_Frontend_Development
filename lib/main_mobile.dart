@@ -11,17 +11,14 @@ class MainMobile extends StatefulWidget {
 }
 
 class _MainMobileState extends State<MainMobile> {
-
-  void rerenderMainMobile(){
-    setState(() {
-      
-    });
-    
+  void rerenderMainMobile() {
+    setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     //print("current page: $currentPage"); // debugging
-     bool? gridEditMode = mainGridKey.currentState?.getEditMode();
+    bool? gridEditMode = mainGridKey.currentState?.getEditMode();
     gridEditMode ??= false;
     return MaterialApp(
       //textDirection:  TextDirection.ltr,
@@ -36,15 +33,15 @@ class _MainMobileState extends State<MainMobile> {
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
-                    fontWeight: FontWeight.w500), 
-
+                    fontWeight: FontWeight.w500),
               ),
-           if( currentPage == "Dashboard")   ElevatedButton(
+              if (currentPage == "Dashboard")
+                ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    maximumSize: const Size(5, 100) ,
-                    fixedSize: const Size(5, 100) ,
-                    minimumSize : const Size(5, 100) ,
-                    padding:const EdgeInsets.all(0),
+                    maximumSize: const Size(5, 100),
+                    fixedSize: const Size(5, 100),
+                    minimumSize: const Size(5, 100),
+                    padding: const EdgeInsets.all(0),
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.grey[850],
                     elevation: 0,
@@ -52,17 +49,18 @@ class _MainMobileState extends State<MainMobile> {
                     shadowColor: Colors.transparent,
                   ),
                   onPressed: () {
-                  mainGridKey.currentState?.updateEditMode();
-                  setState(() {
-                  });
-                },
-                  child: Icon(gridEditMode ? Icons.save : Icons.edit, color: Colors.black,),
+                    mainGridKey.currentState?.updateEditMode();
+                    setState(() {});
+                  },
+                  child: Icon(
+                    gridEditMode ? Icons.save : Icons.edit,
+                    color: Colors.black,
+                  ),
                 ),
             ],
           ),
-          backgroundColor:
-              Colors.grey[100], 
-          elevation: 0, 
+          backgroundColor: Colors.grey[100],
+          elevation: 0,
         ),
 
         body: NavBar(rerenderMainMobile: rerenderMainMobile),
@@ -71,4 +69,3 @@ class _MainMobileState extends State<MainMobile> {
     );
   }
 }
-

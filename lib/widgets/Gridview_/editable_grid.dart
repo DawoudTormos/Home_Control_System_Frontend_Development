@@ -57,7 +57,10 @@ class _EditableGridState extends State<EditableGrid> {
                       editMode = !editMode;
                     });
                   },
-                  child: Icon(editMode ? Icons.save : Icons.edit, color: Colors.black,),
+                  child: Icon(
+                    editMode ? Icons.save : Icons.edit,
+                    color: Colors.black,
+                  ),
                 ),
               ],
             ),
@@ -79,13 +82,12 @@ class _EditableGridState extends State<EditableGrid> {
 
                 Widget gridItem = Container();
                 if (item['SType'] == "sensor") {
-                   gridItem = GridItemSensor(item: item);
-                }else if(item['SType'] == "switch"){
-                   gridItem = item['Type'] == 0
-                    ? GridItemSwitch(item: item)
-                    : GridItemSlider(item: item);
+                  gridItem = GridItemSensor(item: item);
+                } else if (item['SType'] == "switch") {
+                  gridItem = item['Type'] == 0
+                      ? GridItemSwitch(item: item)
+                      : GridItemSlider(item: item);
                 }
-
 
                 if (editMode) {
                   return Draggable<int>(
@@ -107,22 +109,25 @@ class _EditableGridState extends State<EditableGrid> {
                     child: DragTarget<int>(
                       onAcceptWithDetails: (fromIndex) {
                         setState(() {
-                          List<Map<String,dynamic>> requestBody = [];
-                          requestBody.add({
-                                      "ID":widget.data[index]["ID"],
-                                      "Type": widget.data[index]["SType"],
-                                      "Index": widget.data[fromIndex.data]["Index"]
-                          },);
-                          requestBody.add({
-                                      "ID":widget.data[fromIndex.data]["ID"],
-                                      "Type": widget.data[fromIndex.data]["SType"],
-                                      "Index": widget.data[index]["Index"]
-                          },);
+                          List<Map<String, dynamic>> requestBody = [];
+                          requestBody.add(
+                            {
+                              "ID": widget.data[index]["ID"],
+                              "Type": widget.data[index]["SType"],
+                              "Index": widget.data[fromIndex.data]["Index"]
+                            },
+                          );
+                          requestBody.add(
+                            {
+                              "ID": widget.data[fromIndex.data]["ID"],
+                              "Type": widget.data[fromIndex.data]["SType"],
+                              "Index": widget.data[index]["Index"]
+                            },
+                          );
                           final jsonBody = jsonEncode(requestBody);
-                          api?.setIndexes(jsonBody);                         
+                          api?.setIndexes(jsonBody);
                           final temp = widget.data.removeAt(fromIndex.data);
                           widget.data.insert(index, temp);
-
                         });
                       },
                       builder: (context, candidateData, rejectedData) {

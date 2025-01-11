@@ -16,68 +16,62 @@ class WaitLink extends StatefulWidget {
 class _WaitLinkState extends State<WaitLink> {
   late WebSocketChannel channel;
   bool reqSuccess = true;
-  late int reqID ;
+  late int reqID;
   bool loopState = true;
 
   @override
   void initState() {
     super.initState();
-
-
   }
 
-   void reqStatusCheckLoop(BuildContext context) async{
-      if(reqSuccess){
-        while (loopState) {
-   
-
-        
+  void reqStatusCheckLoop(BuildContext context) async {
+    if (reqSuccess) {
+      while (loopState) {
         Map<String, dynamic> requestData = {
           'reqID': reqID,
         };
         String jsonBody = jsonEncode(requestData);
 
         api!.checkDeviceLinkRequestState(jsonBody).then((value) {
-          if(value != "error"){
-
-            print("response json: "+value);
+          if (value != "error") {
+            print("response json: " + value);
             var response = jsonDecode(value);
 
-
-            if(response["error"] == "Request not found."){
-                            ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Request timed out on server.'),
-                    backgroundColor: Colors.red,
-                    behavior: SnackBarBehavior.floating, // Makes the SnackBar float
-                    margin: EdgeInsets.only(
+            if (response["error"] == "Request not found.") {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Request timed out on server.'),
+                  backgroundColor: Colors.red,
+                  behavior:
+                      SnackBarBehavior.floating, // Makes the SnackBar float
+                  margin: EdgeInsets.only(
                     left: 16,
                     right: 16,
-                    bottom: 100, // Adjust this to leave space above the bottom navbar
+                    bottom:
+                        100, // Adjust this to leave space above the bottom navbar
                   ),
-                  ),
-                );
+                ),
+              );
 
-                
               Future.delayed(Duration(seconds: 1), () {
-          
                 Navigator.pop(context);
               });
               loopState = false;
-
-            }else if(response["status"] == "success"){
+            } else if (response["status"] == "success") {
               ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Linking Request Successful.'),
-                    backgroundColor: Colors.green,
-                    behavior: SnackBarBehavior.floating, // Makes the SnackBar float
-                    margin: EdgeInsets.only(
+                const SnackBar(
+                  content: Text('Linking Request Successful.'),
+                  backgroundColor: Colors.green,
+                  behavior:
+                      SnackBarBehavior.floating, // Makes the SnackBar float
+                  margin: EdgeInsets.only(
                     left: 16,
                     right: 16,
-                    bottom: 100, // Adjust this to leave space above the bottom navbar
+                    bottom:
+                        100, // Adjust this to leave space above the bottom navbar
                   ),
-                  ),
-                );
+                ),
+              );
 
               Future.delayed(Duration(seconds: 1), () {
                 int count = 0;
@@ -88,82 +82,73 @@ class _WaitLinkState extends State<WaitLink> {
 
               loopState = false;
               api!.fetchAndProcessDevices();
-
-            }else if(response["status"] == "pending"){
-
-            }else {
-
-
-            }
-          }else{
+            } else if (response["status"] == "pending") {
+            } else {}
+          } else {
             ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Server Error or internet failed.'),
-                    backgroundColor: Colors.red,
-                    behavior: SnackBarBehavior.floating, // Makes the SnackBar float
-                    margin: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: 100, // Adjust this to leave space above the bottom navbar
-                  ),
-                  ),
-                );
+              const SnackBar(
+                content: Text('Server Error or internet failed.'),
+                backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating, // Makes the SnackBar float
+                margin: EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  bottom:
+                      100, // Adjust this to leave space above the bottom navbar
+                ),
+              ),
+            );
             loopState = false;
             Navigator.pop(context);
           }
         });
 
-      await Future.delayed(Duration(seconds: 3));
-
+        await Future.delayed(Duration(seconds: 3));
       }
-
     }
-   }
+  }
 
-   void initAfterBuild(BuildContext context)async{
-
+  void initAfterBuild(BuildContext context) async {
     widget.deviceData.remove('type');
     String jsonBody = jsonEncode(widget.deviceData);
     print(jsonBody);
 
     api!.sendLinkRequest(jsonBody).then((value) {
-      if(value != "error"){
-        print("response json: "+value);
+      if (value != "error") {
+        print("response json: " + value);
         var response = jsonDecode(value);
         reqID = response["ReqID"];
         ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Linking Request Successful and Pending.'),
-                    backgroundColor: Colors.green,
-                    behavior: SnackBarBehavior.floating, // Makes the SnackBar float
-                    margin: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: 100, // Adjust this to leave space above the bottom navbar
-                  ),
-                  ),
-                );
+          const SnackBar(
+            content: Text('Linking Request Successful and Pending.'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating, // Makes the SnackBar float
+            margin: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              bottom: 100, // Adjust this to leave space above the bottom navbar
+            ),
+          ),
+        );
         reqSuccess = true;
         reqStatusCheckLoop(context);
-
-      }else{
-
+      } else {
         Future.delayed(Duration(seconds: 1), () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                    content: Text('Linking Request Failed.'),
-                    backgroundColor: Colors.red,
-                    behavior: SnackBarBehavior.floating, // Makes the SnackBar float
-                    margin: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: 100, // Adjust this to leave space above the bottom navbar
-                  ),
-                  ),
-                );
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Linking Request Failed.'),
+              backgroundColor: Colors.red,
+              behavior: SnackBarBehavior.floating, // Makes the SnackBar float
+              margin: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom:
+                    100, // Adjust this to leave space above the bottom navbar
+              ),
+            ),
+          );
           Navigator.pop(context);
         });
-
       }
     });
   }
@@ -175,7 +160,6 @@ class _WaitLinkState extends State<WaitLink> {
 
   @override
   Widget build(BuildContext context) {
-
     initAfterBuild(context);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -209,12 +193,10 @@ class _WaitLinkState extends State<WaitLink> {
                   color: Colors.black,
                   fontSize: 19,
                   fontWeight: FontWeight.bold,
-
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 22),
-
             ],
           ),
         ),

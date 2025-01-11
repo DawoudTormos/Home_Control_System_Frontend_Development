@@ -17,10 +17,9 @@ class GridItemSwitch extends StatefulWidget {
 
 class _GridItemSwitchState extends State<GridItemSwitch> {
   _GridItemSwitchState();
-bool prevSwitchValue = false;
+  bool prevSwitchValue = false;
 
-  
- @override
+  @override
   void initState() {
     super.initState();
     prevSwitchValue = widget.item["Value"];
@@ -30,15 +29,15 @@ bool prevSwitchValue = false;
 
   void _startInfiniteLoop() {
     Timer.periodic(const Duration(milliseconds: 600), (timer) {
-      if(widget.item["Value"] != prevSwitchValue){
-        prevSwitchValue = widget.item["Value"] ;
-       Map<String,dynamic> requestBody = {};
+      if (widget.item["Value"] != prevSwitchValue) {
+        prevSwitchValue = widget.item["Value"];
+        Map<String, dynamic> requestBody = {};
 
-       requestBody["ID"] = widget.item["ID"];
-       requestBody["Value"] = widget.item["Value"]? 1 :0;
+        requestBody["ID"] = widget.item["ID"];
+        requestBody["Value"] = widget.item["Value"] ? 1 : 0;
 
-       final jsonBody = jsonEncode(requestBody);
-       api?.setSwitchValue(jsonBody);     
+        final jsonBody = jsonEncode(requestBody);
+        api?.setSwitchValue(jsonBody);
       }
       /*setState(() {      });*/
     });

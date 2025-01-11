@@ -9,21 +9,24 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile', style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)),
-                      backgroundColor: Colors.grey[50], // Set background color to white
-
-
+        title: const Text('Profile',
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 24,
+                fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.grey[50], // Set background color to white
       ),
-              backgroundColor: Colors.white, // Set background color to white
+      backgroundColor: Colors.white, // Set background color to white
 
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical:22.0 , horizontal: 13.0),
+        padding: const EdgeInsets.symmetric(vertical: 22.0, horizontal: 13.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/profile_picture.png'), // Placeholder image
+              backgroundImage:
+                  AssetImage('assets/profile_picture.png'), // Placeholder image
             ),
             const SizedBox(height: 16),
             Text(
@@ -74,10 +77,11 @@ class ProfilePage extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, // White background
-                        foregroundColor: Colors.red, // Black text
-                        side: const BorderSide(color: Colors.red, width: 2), // Black border
-                      ),
+                  backgroundColor: Colors.white, // White background
+                  foregroundColor: Colors.red, // Black text
+                  side: const BorderSide(
+                      color: Colors.red, width: 2), // Black border
+                ),
                 onPressed: () {
                   api!.logout();
                 },

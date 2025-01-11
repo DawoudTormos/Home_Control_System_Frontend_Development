@@ -9,15 +9,11 @@ import 'package:flutter/material.dart';
 import "package:hcs_project/widgets/gridview_/editable_grid.dart";
 import 'package:provider/provider.dart';
 
-
-
-
 class MainGrid extends StatefulWidget {
   Map<String, List<Map<String, dynamic>>>? gridItems;
   List<Map<String, dynamic>>? gridItemsIndexes;
 
-
-   MainGrid(
+  MainGrid(
       {super.key, required this.gridItems, required this.gridItemsIndexes});
 
   @override
@@ -29,8 +25,7 @@ class MainGridState extends State<MainGrid> {
 
   bool editMode = false;
 
-    
- @override
+  @override
   void initState() {
     super.initState();
     // Start the infinite loop
@@ -39,14 +34,13 @@ class MainGridState extends State<MainGrid> {
 
   void _startInfiniteLoop() {
     Timer.periodic(const Duration(milliseconds: 2500), (timer) async {
-        await api!.fetchAndProcessDevices();
-        setState(() {
-          widget.gridItemsIndexes = api!.gridItemsIndexes;
-          widget.gridItems = api!.gridItems;
-        });
+      await api!.fetchAndProcessDevices();
+      setState(() {
+        widget.gridItemsIndexes = api!.gridItemsIndexes;
+        widget.gridItems = api!.gridItems;
+      });
     });
   }
-  
 
   void updateEditMode() {
     setState(() {
@@ -54,10 +48,10 @@ class MainGridState extends State<MainGrid> {
     });
   }
 
-    bool getEditMode() {
-return editMode;
+  bool getEditMode() {
+    return editMode;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -85,28 +79,29 @@ return editMode;
               ),
               //SizedBox(width: columnsCount * 500 - 330),
 
-             if(kIsWeb) FloatingActionButton.extended(
-                onPressed: () {
-                  setState(() {
-                    editMode = !editMode;
-                  });
-                },
-                icon: Icon(editMode ? Icons.save : Icons.edit,
-                    color: Colors.grey[900]!),
-                label: Text(
-                  editMode ? "Save" : "Edit",
-                  style: TextStyle(
-                    color: Colors.grey[900]!,
-                    fontWeight: FontWeight.bold,
+              if (kIsWeb)
+                FloatingActionButton.extended(
+                  onPressed: () {
+                    setState(() {
+                      editMode = !editMode;
+                    });
+                  },
+                  icon: Icon(editMode ? Icons.save : Icons.edit,
+                      color: Colors.grey[900]!),
+                  label: Text(
+                    editMode ? "Save" : "Edit",
+                    style: TextStyle(
+                      color: Colors.grey[900]!,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  // Button shadow
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                backgroundColor: Colors.white,
-                elevation: 0,
-                // Button shadow
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
             ],
           ),
         ),
@@ -145,13 +140,14 @@ return editMode;
         ),
         itemCount: widget.gridItems!.length,
         itemBuilder: (context, index) {
-          final item = widget.gridItems![widget.gridItemsIndexes![index]["Name"]]!;
+          final item =
+              widget.gridItems![widget.gridItemsIndexes![index]["Name"]]!;
 
-          if(item.length == 0){
+          if (item.length == 0) {
             return Container();
           }
-          Widget gridItem =
-              EditableGrid(title: widget.gridItemsIndexes![index]["Name"], data: item);
+          Widget gridItem = EditableGrid(
+              title: widget.gridItemsIndexes![index]["Name"], data: item);
 
           if (editMode) {
             return Draggable<int>(
@@ -169,19 +165,24 @@ return editMode;
               child: DragTarget<int>(
                 onAcceptWithDetails: (fromIndex) {
                   setState(() {
-                    List<Map<String,dynamic>> requestBody = [];
-                          requestBody.add({
-                                      "ID":widget.gridItemsIndexes![index]["ID"],
-                                      "Type": "room",
-                                      "Index": widget.gridItemsIndexes![fromIndex.data]["Index"]
-                          },);
-                          requestBody.add({
-                                      "ID":widget.gridItemsIndexes![fromIndex.data]["ID"],
-                                      "Type": "room",
-                                      "Index": widget.gridItemsIndexes![index]["Index"]
-                          },);
-                          final jsonBody = jsonEncode(requestBody);
-                          api?.setIndexes(jsonBody);                    
+                    List<Map<String, dynamic>> requestBody = [];
+                    requestBody.add(
+                      {
+                        "ID": widget.gridItemsIndexes![index]["ID"],
+                        "Type": "room",
+                        "Index": widget.gridItemsIndexes![fromIndex.data]
+                            ["Index"]
+                      },
+                    );
+                    requestBody.add(
+                      {
+                        "ID": widget.gridItemsIndexes![fromIndex.data]["ID"],
+                        "Type": "room",
+                        "Index": widget.gridItemsIndexes![index]["Index"]
+                      },
+                    );
+                    final jsonBody = jsonEncode(requestBody);
+                    api?.setIndexes(jsonBody);
                     final temp =
                         widget.gridItemsIndexes!.removeAt(fromIndex.data);
                     widget.gridItemsIndexes!.insert(index, temp);
@@ -206,12 +207,12 @@ return editMode;
           physics: const NeverScrollableScrollPhysics(),
           itemCount: widget.gridItems!.length,
           itemBuilder: (context, index) {
+            final item =
+                widget.gridItems![widget.gridItemsIndexes![index]["Name"]]!;
 
-            final item = widget.gridItems![widget.gridItemsIndexes![index]["Name"]]!;
-            
-            if(item.length == 0){
-            return Container();
-              }
+            if (item.length == 0) {
+              return Container();
+            }
 
             Widget gridItem = EditableGrid(
                 title: widget.gridItemsIndexes![index]["Name"], data: item);
@@ -232,21 +233,25 @@ return editMode;
                 child: DragTarget<int>(
                   onAcceptWithDetails: (fromIndex) {
                     setState(() {
-                      
-                    List<Map<String,dynamic>> requestBody = [];
-                          requestBody.add({
-                                      "ID":widget.gridItemsIndexes![index]["ID"],
-                                      "Type": "room",
-                                      "Index": widget.gridItemsIndexes![fromIndex.data]["Index"]
-                          },);
-                          requestBody.add({
-                                      "ID":widget.gridItemsIndexes![fromIndex.data]["ID"],
-                                      "Type": "room",
-                                      "Index": widget.gridItemsIndexes![index]["Index"]
-                          },);
-                          final jsonBody = jsonEncode(requestBody);
-                          api?.setIndexes(jsonBody);
-                          print(jsonBody);       
+                      List<Map<String, dynamic>> requestBody = [];
+                      requestBody.add(
+                        {
+                          "ID": widget.gridItemsIndexes![index]["ID"],
+                          "Type": "room",
+                          "Index": widget.gridItemsIndexes![fromIndex.data]
+                              ["Index"]
+                        },
+                      );
+                      requestBody.add(
+                        {
+                          "ID": widget.gridItemsIndexes![fromIndex.data]["ID"],
+                          "Type": "room",
+                          "Index": widget.gridItemsIndexes![index]["Index"]
+                        },
+                      );
+                      final jsonBody = jsonEncode(requestBody);
+                      api?.setIndexes(jsonBody);
+                      print(jsonBody);
                       final temp =
                           widget.gridItemsIndexes!.removeAt(fromIndex.data);
                       widget.gridItemsIndexes!.insert(index, temp);

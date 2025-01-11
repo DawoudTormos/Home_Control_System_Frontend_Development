@@ -10,19 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 
-
 // ignore: must_be_immutable
 class NavBar extends StatelessWidget {
   final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
-  VoidCallback  rerenderMainMobile;
+  VoidCallback rerenderMainMobile;
 
   NavBar({super.key, required this.rerenderMainMobile});
 
-  List<Widget> screens=[];
-  
-  
-
+  List<Widget> screens = [];
 
   List<PersistentBottomNavBarItem> _navBarItems() {
     return [
@@ -35,7 +31,7 @@ class NavBar extends StatelessWidget {
         inactiveColorSecondary: Colors.blue,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.memory ),
+        icon: const Icon(Icons.memory),
         title: "Assistant",
         activeColorPrimary: Colors.white,
         activeColorSecondary: Colors.black,
@@ -63,18 +59,18 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        //final someValue = context.watch<LoginState>().isLoggedIn;
+    //final someValue = context.watch<LoginState>().isLoggedIn;
 
-    
-    if(!kIsWeb){
-   screens = [
-    Dashboard(gridItems: api!.gridItems, gridItemsIndexes: api!.gridItemsIndexes), // Home
-    const AIAssistantPage(), // Dashboard
-     DeviceManager(), // Device Manager 
-    ProfilePage()
-  ];
-
-  }
+    if (!kIsWeb) {
+      screens = [
+        Dashboard(
+            gridItems: api!.gridItems,
+            gridItemsIndexes: api!.gridItemsIndexes), // Home
+        const AIAssistantPage(), // Dashboard
+        DeviceManager(), // Device Manager
+        ProfilePage()
+      ];
+    }
     return PersistentTabView(
       context,
       controller: _controller,
@@ -89,21 +85,21 @@ class NavBar extends StatelessWidget {
       onItemSelected: (index) {
         switch (index) {
           case 0:
-          //print("editted");//debugging
-          currentPage = "Dashboard";
-          rerenderMainMobile();
+            //print("editted");//debugging
+            currentPage = "Dashboard";
+            rerenderMainMobile();
             break;
           case 1:
-          currentPage = "Assistant";
-          rerenderMainMobile();
+            currentPage = "Assistant";
+            rerenderMainMobile();
             break;
           case 2:
-          currentPage = "addDevice";
-          rerenderMainMobile();
+            currentPage = "addDevice";
+            rerenderMainMobile();
             break;
           case 3:
-          currentPage = "profile";
-          rerenderMainMobile();
+            currentPage = "profile";
+            rerenderMainMobile();
             break;
         }
       },

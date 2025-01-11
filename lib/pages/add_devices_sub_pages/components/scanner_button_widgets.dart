@@ -3,9 +3,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class AnalyzeImageFromGalleryButton extends StatelessWidget {
-    // ignore: non_constant_identifier_names
-    final void Function(BarcodeCapture barcodes) handleBarcode;
-   AnalyzeImageFromGalleryButton({required this.controller, required this.handleBarcode, super.key });
+  // ignore: non_constant_identifier_names
+  final void Function(BarcodeCapture barcodes) handleBarcode;
+  AnalyzeImageFromGalleryButton(
+      {required this.controller, required this.handleBarcode, super.key});
 
   final MobileScannerController controller;
 
@@ -37,28 +38,30 @@ class AnalyzeImageFromGalleryButton extends StatelessWidget {
         final SnackBar snackbar = barcodes != null
             ? const SnackBar(
                 content: Text('QR Code found!'),
-                duration: Duration(milliseconds: 1000), // Default is 4000ms (4 seconds)
+                duration: Duration(
+                    milliseconds: 1000), // Default is 4000ms (4 seconds)
                 backgroundColor: Colors.green,
                 behavior: SnackBarBehavior.floating, // Makes the SnackBar float
-                    margin: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: 100, // Adjust this to leave space above the bottom navbar
-                  ),
+                margin: EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  bottom:
+                      100, // Adjust this to leave space above the bottom navbar
+                ),
               )
             : const SnackBar(
                 content: Text('No QR Code found!'),
                 backgroundColor: Colors.red,
                 behavior: SnackBarBehavior.floating, // Makes the SnackBar float
-                    margin: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: 100, // Adjust this to leave space above the bottom navbar
-                  ),
+                margin: EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  bottom:
+                      100, // Adjust this to leave space above the bottom navbar
+                ),
               );
         handleBarcode(barcodes!);
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
-
       },
     );
   }

@@ -8,10 +8,9 @@ class LoadingPage extends StatelessWidget {
     return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(
-  color: Colors.black, // Customize the color
-  strokeWidth: 4.0,  // Adjust the thickness
-)
-,
+          color: Colors.black, // Customize the color
+          strokeWidth: 4.0, // Adjust the thickness
+        ),
       ),
     );
   }

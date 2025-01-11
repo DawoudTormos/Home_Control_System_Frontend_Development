@@ -41,11 +41,12 @@ class AppRouter extends RouterDelegate<AppState>
       key: navigatorKey,
       pages: [
         MaterialPage(
-            child:
-                Dashboard(gridItems: api!.gridItems, gridItemsIndexes: api!.gridItemsIndexes),
+            child: Dashboard(
+                gridItems: api!.gridItems,
+                gridItemsIndexes: api!.gridItemsIndexes),
             key: const ValueKey('HomePage')),
-         if(_currentState.path == "AIAssitant")
-            const MaterialPage(
+        if (_currentState.path == "AIAssitant")
+          const MaterialPage(
               child: AIAssistantPage(), key: ValueKey('AIAssistantPage')),
         if (!['/', '/page2', '/page3'].contains(_currentState.path))
           const MaterialPage(

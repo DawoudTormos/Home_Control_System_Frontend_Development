@@ -14,12 +14,11 @@ class DeviceManager extends StatefulWidget {
 }
 
 class _DeviceManagerState extends State<DeviceManager> {
-
   @override
   Widget build(BuildContext context) {
-      final double screenWidth = MediaQuery.of(context).size.width;
-      int updateCount = context.watch<DataUpdateState>().updateCount;
-      String addRoomTextFieldValue = "";
+    final double screenWidth = MediaQuery.of(context).size.width;
+    int updateCount = context.watch<DataUpdateState>().updateCount;
+    String addRoomTextFieldValue = "";
 
     // Access the grid items from the API
     final List<Map<String, dynamic>> gridItemsIndexes = api!.gridItemsIndexes;
@@ -39,95 +38,107 @@ class _DeviceManagerState extends State<DeviceManager> {
                   child: Text(
                     'Rooms',
                     style: TextStyle(
-                    fontSize: screenWidth < 430 ? 20 : 24,
-                    fontWeight: FontWeight.bold),
+                        fontSize: screenWidth < 430 ? 20 : 24,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-            // Add Room Button
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5.0),
-              child: IconButton(
-                onPressed: () {
-                  // Open the modal to add a new room
-             showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text(
-                          'Enter Room Name',
-                          style: TextStyle(color: Colors.black), // Black title text
-                        ),
-                        surfaceTintColor: Colors.white, // Remove tint
-                        backgroundColor: Colors.white, // White background for the dialog
-            
-                        content: TextField(
-                          autofocus: true,
-                          decoration: const InputDecoration(
-                            hintText: 'Room Name',
-                            hintStyle: TextStyle(color: Colors.grey), // Grey hint text for visibility
-                            border: UnderlineInputBorder(),
-                            enabledBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.black), // Black underline when enabled
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.black), // Black underline when focused
-                          ), 
-                          ),
-                          style: const TextStyle(
-                            color: Colors.black, // Black text color
-                          ),
-                          onChanged: (value) {
-                            addRoomTextFieldValue = value;
-                            //Navigator.pop(context);
-                          },
-                          
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context); // Close the modal
-                            },
-                            child: const Text(
-                              'Cancel',
-                              style: TextStyle(color: Colors.black), // Black text for Cancel button
+                // Add Room Button
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: IconButton(
+                    onPressed: () {
+                      // Open the modal to add a new room
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text(
+                              'Enter Room Name',
+                              style: TextStyle(
+                                  color: Colors.black), // Black title text
                             ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                            //print(addRoomTextFieldValue);
-                            Map<String,String> requestBody = {};
-                            requestBody["Name"] = addRoomTextFieldValue;
-                            String jsonBody = jsonEncode(requestBody);
-                            api?.addRoom(jsonBody);
-                              Navigator.pop(context); // Close the modal
-                            },
-                            child: const Text(
-                              'Add',
-                              style: TextStyle(color: Colors.black), // Black text for Add button
+                            surfaceTintColor: Colors.white, // Remove tint
+                            backgroundColor:
+                                Colors.white, // White background for the dialog
+
+                            content: TextField(
+                              autofocus: true,
+                              decoration: const InputDecoration(
+                                hintText: 'Room Name',
+                                hintStyle: TextStyle(
+                                    color: Colors
+                                        .grey), // Grey hint text for visibility
+                                border: UnderlineInputBorder(),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors
+                                          .black), // Black underline when enabled
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors
+                                          .black), // Black underline when focused
+                                ),
+                              ),
+                              style: const TextStyle(
+                                color: Colors.black, // Black text color
+                              ),
+                              onChanged: (value) {
+                                addRoomTextFieldValue = value;
+                                //Navigator.pop(context);
+                              },
                             ),
-                          ),
-                        ],
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context); // Close the modal
+                                },
+                                child: const Text(
+                                  'Cancel',
+                                  style: TextStyle(
+                                      color: Colors
+                                          .black), // Black text for Cancel button
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  //print(addRoomTextFieldValue);
+                                  Map<String, String> requestBody = {};
+                                  requestBody["Name"] = addRoomTextFieldValue;
+                                  String jsonBody = jsonEncode(requestBody);
+                                  api?.addRoom(jsonBody);
+                                  Navigator.pop(context); // Close the modal
+                                },
+                                child: const Text(
+                                  'Add',
+                                  style: TextStyle(
+                                      color: Colors
+                                          .black), // Black text for Add button
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
-                  );
-            
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black, backgroundColor: Colors.transparent, // White text
-                    elevation:0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: BorderSide.none,
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      backgroundColor: Colors.transparent, // White text
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: BorderSide.none,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: -10, vertical: 3),
+                    ),
+                    icon: const Icon(
+                      Icons.add,
+                      size: 28,
+                      color: Colors.black,
+                    ),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: -10, vertical: 3),
-                  
-                ),
-                icon:  const Icon(Icons.add, size: 28,color: Colors.black,),
-
-              ),
-            )
-            
-            
+                )
               ],
             ),
           ),
@@ -146,7 +157,6 @@ class _DeviceManagerState extends State<DeviceManager> {
                   //print(room);
                   return GestureDetector(
                     onTap: () {
-                      
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => DevicesRoom(room: room),
@@ -155,16 +165,22 @@ class _DeviceManagerState extends State<DeviceManager> {
                     },
                     child: Card(
                       color: Colors.white,
-                      elevation: 2, 
-                      margin: const EdgeInsets.all(12), // Slightly larger margin for spacing
+                      elevation: 2,
+                      margin: const EdgeInsets.all(
+                          12), // Slightly larger margin for spacing
                       shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Colors.black, width: 2), // Black border for the rooms
-                        borderRadius: BorderRadius.circular(8), // Rounded corners
+                        side: const BorderSide(
+                            color: Colors.black,
+                            width: 2), // Black border for the rooms
+                        borderRadius:
+                            BorderRadius.circular(8), // Rounded corners
                       ),
                       child: Center(
                         child: Text(
                           capitalize(room['Name']),
-                          style: TextStyle(fontSize: screenWidth < 430 ? 17 : 21, color: Colors.black),
+                          style: TextStyle(
+                              fontSize: screenWidth < 430 ? 17 : 21,
+                              color: Colors.black),
                         ),
                       ),
                     ),
@@ -173,7 +189,6 @@ class _DeviceManagerState extends State<DeviceManager> {
               ),
             ),
           ),
-
         ],
       ),
     );
@@ -198,7 +213,3 @@ class AnotherPage extends StatelessWidget {
     );
   }
 }
-
-
-
-

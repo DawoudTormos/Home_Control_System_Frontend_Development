@@ -17,7 +17,8 @@ class SignUpPage extends StatelessWidget {
           return Center(
             child: SingleChildScrollView(
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: isWideScreen ? 400 : double.infinity),
+                constraints: BoxConstraints(
+                    maxWidth: isWideScreen ? 400 : double.infinity),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -83,12 +84,14 @@ class SignUpPage extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Already have an account?', style: TextStyle(color: Colors.black)),
+                          const Text('Already have an account?',
+                              style: TextStyle(color: Colors.black)),
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: const Text('Login', style: TextStyle(color: Colors.black)),
+                            child: const Text('Login',
+                                style: TextStyle(color: Colors.black)),
                           ),
                         ],
                       ),

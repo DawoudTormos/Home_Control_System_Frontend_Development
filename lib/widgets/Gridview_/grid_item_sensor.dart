@@ -18,8 +18,6 @@ class GridItemSensor extends StatefulWidget {
 class _GridItemSensorState extends State<GridItemSensor> {
   _GridItemSensorState();
 
-
-
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -29,7 +27,7 @@ class _GridItemSensorState extends State<GridItemSensor> {
       color: Colors.white,
       shape: RoundedRectangleBorder(
         side: BorderSide(
-          color:widget.item["Color"],
+          color: widget.item["Color"],
           width: 2,
         ),
         borderRadius: BorderRadius.circular(8),
@@ -45,8 +43,7 @@ class _GridItemSensorState extends State<GridItemSensor> {
               children: [
                 Icon(
                   widget.item["Icon"],
-                  color: widget.item["Color"]
-                      ,
+                  color: widget.item["Color"],
                   size: (screenWidth < 600 ? 36 : 38) * factor,
                 ),
                 const SizedBox(width: 12),
@@ -60,24 +57,20 @@ class _GridItemSensorState extends State<GridItemSensor> {
                 ),
               ],
             ),
-
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
               child: Text(
-                widget.item["Value"].toString() ,
+                widget.item["Value"].toString(),
                 style: TextStyle(
-                  color: widget.item["Color"] ,
+                  color: widget.item["Color"],
                   fontWeight: FontWeight.bold,
                   fontSize: 18 * factor,
                 ),
               ),
             ),
-
-
           ],
         ),
       ),
     );
   }
-  
 }

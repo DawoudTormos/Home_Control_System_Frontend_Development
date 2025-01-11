@@ -32,28 +32,27 @@ class _AIAssistantPageState extends State<AIAssistantPage>
     _startInfiniteLoop();
   }
 
-
-    void _startInfiniteLoop() {
+  void _startInfiniteLoop() {
     Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) return;  // Check if widget is still in the widget tree
+      if (!mounted) return; // Check if widget is still in the widget tree
       setState(() {
         _isListening = _speechToText.isListening;
       });
     });
   }
 
-
-    void _initSpeech() async {
-    await _speechToText.initialize(finalTimeout :const Duration(seconds: 20));
+  void _initSpeech() async {
+    await _speechToText.initialize(finalTimeout: const Duration(seconds: 20));
     setState(() {});
   }
 
   Future<void> _startListening() async {
-    await _speechToText.listen(onResult: _onSpeechResult , listenOptions: stt.SpeechListenOptions(listenMode: stt.ListenMode.dictation ));
+    await _speechToText.listen(
+        onResult: _onSpeechResult,
+        listenOptions:
+            stt.SpeechListenOptions(listenMode: stt.ListenMode.dictation));
     _isListening = true;
-    setState(() {
-      
-    });
+    setState(() {});
     /*bool available = await _speech.initialize(onStatus :(e){print("------------------\n\n\n\n$e.errorMsg\n\n\n\n\n-------------------");});
     if (available) {
       setState(() => _isListening = true);
@@ -76,7 +75,7 @@ class _AIAssistantPageState extends State<AIAssistantPage>
    // _speech.changePauseFor(pauseFor)*/
   }
 
-   void _onSpeechResult(SpeechRecognitionResult result) {
+  void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       _transcription = result.recognizedWords;
     });
@@ -85,12 +84,11 @@ class _AIAssistantPageState extends State<AIAssistantPage>
   void _stopListening() {
     _speechToText.stop();
     setState(() => _isListening = false);
-    
   }
 
   @override
   void dispose() {
-   // _speech.stop();
+    // _speech.stop();
     _waveController.dispose();
     super.dispose();
   }
@@ -100,7 +98,7 @@ class _AIAssistantPageState extends State<AIAssistantPage>
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(0,20,0,100),
+        padding: const EdgeInsets.fromLTRB(0, 20, 0, 100),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -165,26 +163,25 @@ class _AIAssistantPageState extends State<AIAssistantPage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: (){
-                    if(!_isListening){
+                  onPressed: () {
+                    if (!_isListening) {
                       _startListening();
-                    }else{
+                    } else {
                       _stopListening();
                     }
-                  } ,
+                  },
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
                     backgroundColor: Colors.black,
                     padding: const EdgeInsets.all(20),
                   ),
                   child: Icon(
-                    _isListening ? Icons.stop : Icons.mic ,
+                    _isListening ? Icons.stop : Icons.mic,
                     size: 30,
                     color: Colors.white,
                   ),
                 ),
                 //const SizedBox(width: 20),
-                
               ],
             ),
           ],
@@ -222,8 +219,10 @@ class AISymbolPainter extends CustomPainter {
 
     // Add dots or circles as a connection in the design
     final circlePaint = Paint()..color = Colors.black;
-    canvas.drawCircle(Offset(size.width * 0.5, size.height * 0.2), 5, circlePaint);
-    canvas.drawCircle(Offset(size.width * 0.7, size.height * 0.5), 5, circlePaint);
+    canvas.drawCircle(
+        Offset(size.width * 0.5, size.height * 0.2), 5, circlePaint);
+    canvas.drawCircle(
+        Offset(size.width * 0.7, size.height * 0.5), 5, circlePaint);
   }
 
   @override

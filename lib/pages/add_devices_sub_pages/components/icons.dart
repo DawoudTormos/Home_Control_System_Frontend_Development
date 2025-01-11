@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 final List<IconData> icons = [
@@ -192,8 +191,8 @@ final List<IconData> icons = [
   Icons.help_outline,
   Icons.speaker_phone,
   Icons.volume_up,
-  Icons.air, 
-  Icons.computer, 
+  Icons.air,
+  Icons.computer,
 ];
 
 final List<String> iconsNames = [
