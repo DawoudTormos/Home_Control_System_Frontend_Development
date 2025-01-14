@@ -1,5 +1,8 @@
 
-# Flutter Editable Grid 🚀
+# HOME_CONTROL_SYSTEM_FRONTEND_DEVELOPMENT 🚀
+
+The Frontend flutter app for HCS project. By Dawoud Tormos
+<br><br><br><br>
 
 Welcome to **Flutter Editable Grid**, a dynamic Flutter application serving as the frontend for a **Home Automation Project (Home Control System - HCS )**. This app demonstrates a sleek, user-friendly **editable grid** that allows seamless interaction with smart home devices. <br><br>
 It is mainly a library for a grid of grids interactive responsive and draggable for reordering UI.
